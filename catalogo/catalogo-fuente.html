@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<title>Catálogo Ziroba 2026 — fuente para PDF</title>
+<!--
+  Este archivo es la FUENTE del PDF del catálogo.
+  Para regenerar el PDF ejecuta (Windows):
+  msedge --headless --disable-gpu --print-to-pdf="catalogo-ziroba-2026.pdf" --no-pdf-header-footer "catalogo-fuente.html"
+-->
+<style>
+  @page { size: 279.4mm 215.9mm; margin: 0; } /* Carta horizontal */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { font-family: 'Segoe UI', Arial, sans-serif; color: #122E52; }
+  .page {
+    width: 279.4mm; height: 215.9mm;
+    page-break-after: always;
+    position: relative; overflow: hidden;
+    background: #fff;
+    padding: 14mm 16mm;
+    display: flex; flex-direction: column;
+  }
+  .page:last-child { page-break-after: avoid; }
+
+  /* ---- Portada ---- */
+  .cover {
+    background: linear-gradient(135deg, #0E3A66 0%, #114B85 45%, #3E2566 100%);
+    color: white;
+    align-items: center; justify-content: center; text-align: center;
+  }
+  .cover .burbuja { position: absolute; border-radius: 50%; border: 2px solid rgba(255,255,255,.18);
+    background: radial-gradient(circle at 32% 30%, rgba(255,255,255,.28), rgba(255,255,255,.03) 65%, transparent); }
+  .cover img.logo { width: 120mm; margin: 0 auto 10mm; filter: drop-shadow(0 4mm 8mm rgba(0,0,0,.3)); }
+  .cover h1 { font-size: 17mm; letter-spacing: .04em; margin-bottom: 4mm; }
+  .cover .anio { display: inline-block; background: linear-gradient(120deg, #FFC93C, #F7931E);
+    color: #4A2E00; font-size: 12mm; font-weight: 800; padding: 2mm 14mm; border-radius: 100px; margin-bottom: 6mm; }
+  .cover .tag { font-size: 6.5mm; color: rgba(255,255,255,.92); font-style: italic; }
+  .cover .pie { position: absolute; bottom: 12mm; left: 0; right: 0; text-align: center;
+    font-size: 4.2mm; color: rgba(255,255,255,.75); }
+
+  /* ---- Encabezado de sección ---- */
+  .head { display: flex; align-items: center; justify-content: space-between; border-bottom: 1.2mm solid; padding-bottom: 4mm; margin-bottom: 7mm; }
+  .head--azul  { border-color: #1779C4; }
+  .head--oro   { border-color: #F7931E; }
+  .head--verde { border-color: #27ae60; }
+  .head h2 { font-size: 11mm; line-height: 1.05; }
+  .head .sub { font-size: 5mm; color: #4B5B73; font-weight: 600; }
+  .head img.mini-logo { height: 14mm; }
+  .chip { display: inline-block; font-size: 3.6mm; font-weight: 800; padding: 1.2mm 5mm; border-radius: 100px; margin-right: 2mm; }
+  .chip--azul  { background: #E7F6FF; color: #1779C4; }
+  .chip--oro   { background: #FFF3D6; color: #B86E00; }
+  .chip--verde { background: #E9F9F0; color: #1e9e56; }
+
+  .intro { font-size: 4.3mm; color: #4B5B73; line-height: 1.55; margin-bottom: 6mm; max-width: 240mm; }
+
+  /* ---- Cuadrícula de productos ---- */
+  .grid { display: grid; gap: 6mm; flex: 1; }
+  .grid--4 { grid-template-columns: repeat(4, 1fr); }
+  .grid--3 { grid-template-columns: repeat(3, 1fr); }
+  .grid--2 { grid-template-columns: repeat(2, 1fr); max-width: 150mm; }
+  .prod {
+    border: .5mm solid #DCE9F4; border-radius: 5mm; overflow: hidden;
+    display: flex; flex-direction: column; background: #fff;
+  }
+  .prod .foto { background: #F2F8FD; height: 52mm; display: flex; align-items: center; justify-content: center; padding: 3mm; }
+  .grid--3 .prod .foto, .grid--2 .prod .foto { height: 62mm; }
+  .prod .foto img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .prod .datos { padding: 3.5mm 4mm 4mm; border-top: 1mm solid; flex: 1; }
+  .prod--azul  .datos { border-color: #2FB8EC; }
+  .prod--oro   .datos { border-color: #FFB920; }
+  .prod--verde .datos { border-color: #2ECC71; }
+  .prod .codigo { font-size: 3.4mm; font-weight: 800; letter-spacing: .08em; color: #1779C4; text-transform: uppercase; }
+  .prod--oro .codigo { color: #B86E00; }
+  .prod--verde .codigo { color: #1e9e56; }
+  .prod .nombre { font-size: 4.4mm; font-weight: 800; margin: 1mm 0; }
+  .prod .detalle { font-size: 3.7mm; color: #4B5B73; line-height: 1.45; }
+
+  .folio { position: absolute; bottom: 6mm; right: 16mm; font-size: 3.6mm; color: #9DB2C7; font-weight: 700; }
+  .marca-pie { position: absolute; bottom: 6mm; left: 16mm; font-size: 3.6mm; color: #9DB2C7; font-weight: 700; }
+
+  /* ---- Contraportada / contacto ---- */
+  .contacto {
+    background: linear-gradient(135deg, #0E3A66 0%, #114B85 45%, #3E2566 100%);
+    color: white; align-items: center; justify-content: center; text-align: center;
+  }
+  .contacto h2 { font-size: 12mm; margin-bottom: 3mm; }
+  .contacto .sub2 { font-size: 5mm; color: rgba(255,255,255,.85); margin-bottom: 10mm; }
+  .fichas { display: grid; grid-template-columns: repeat(2, 92mm); gap: 6mm; justify-content: center; }
+  .ficha {
+    background: rgba(255,255,255,.08); border: .5mm solid rgba(255,255,255,.2);
+    border-radius: 5mm; padding: 6mm; text-align: left;
+  }
+  .ficha .t { font-size: 4mm; font-weight: 800; color: #FFC93C; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2mm; }
+  .ficha .v { font-size: 4.6mm; font-weight: 700; line-height: 1.5; }
+  .contacto img.logo2 { width: 70mm; margin: 12mm auto 0; opacity: .95; }
+</style>
+</head>
+<body>
+
+  <!-- PORTADA -->
+  <div class="page cover">
+    <div class="burbuja" style="width:70mm;height:70mm;top:-20mm;right:-15mm;"></div>
+    <div class="burbuja" style="width:40mm;height:40mm;bottom:18mm;left:14mm;"></div>
+    <div class="burbuja" style="width:22mm;height:22mm;top:36mm;left:40mm;"></div>
+    <div class="burbuja" style="width:14mm;height:14mm;bottom:52mm;right:48mm;"></div>
+    <div style="position:relative;z-index:2;">
+      <img class="logo" src="img-pdf/zirobalogo.png" alt="Ziroba México">
+      <h1>CATÁLOGO</h1>
+      <div class="anio">2026</div>
+      <div class="tag">La Reina del Hogar · 100% Mexicano</div>
+    </div>
+    <div class="pie">zirobamexico.com · ventas@zirobamexico.com · (+52) 55 7678 9035</div>
+  </div>
+
+  <!-- FIBRAS — TAMAÑO NORMAL (1/2) -->
+  <div class="page">
+    <div class="head head--azul">
+      <div>
+        <h2>FIBRA · Acero Inoxidable</h2>
+        <div class="sub">Tamaño Normal — Presentaciones en bolsa y blíster</div>
+      </div>
+      <img class="mini-logo" src="img-pdf/zirobalogo.png" alt="Ziroba">
+    </div>
+    <p class="intro">Creada especialmente para limpiar y remover la grasa pegada en utensilios de cocina: ollas, sartenes, parrillas, asadores y más. Fabricada con acero inoxidable de alta calidad, garantiza una limpieza profunda sin oxidarse ni dañar tus utensilios, uso tras uso.
+      <br><span class="chip chip--azul">No se oxida</span><span class="chip chip--azul">Acero inoxidable</span><span class="chip chip--azul">Máxima durabilidad</span><span class="chip chip--verde">100% Mexicano</span></p>
+    <div class="grid grid--3">
+      <div class="prod prod--azul">
+        <div class="foto"><img src="img-pdf/FB-2.jpg" alt="FB-2"></div>
+        <div class="datos">
+          <div class="codigo">Código: FB-2</div>
+          <div class="nombre">Fibra ZIROBA Bolsa</div>
+          <div class="detalle">Bolsa con 2 fibras. Ideal para venta al menudeo en tiendas de abarrotes y papelerías. Caja máster: 350 bolsas de 2 fibras.</div>
+        </div>
+      </div>
+      <div class="prod prod--azul">
+        <div class="foto"><img src="img-pdf/FB-3.jpg" alt="FB-3"></div>
+        <div class="datos">
+          <div class="codigo">Código: FB-3</div>
+          <div class="nombre">Fibra ZIROBA Bolsa</div>
+          <div class="detalle">Bolsa con 3 fibras. Presentación con mayor contenido para clientes frecuentes. Caja máster: 180 bolsas de 3 fibras.</div>
+        </div>
+      </div>
+      <div class="prod prod--azul">
+        <div class="foto"><img src="img-pdf/FBL-2.jpg" alt="FBL-2"></div>
+        <div class="datos">
+          <div class="codigo">Código: FBL-2</div>
+          <div class="nombre">Fibra ZIROBA Blíster</div>
+          <div class="detalle">Blíster con 2 fibras para exhibición en punto de venta. Caja máster: 160 blíster de 2 fibras.</div>
+        </div>
+      </div>
+    </div>
+    <div class="marca-pie">ZIROBA · La Reina del Hogar</div>
+    <div class="folio">Catálogo 2026 · pág. 2</div>
+  </div>
+
+  <!-- FIBRAS — TAMAÑO NORMAL (2/2) -->
+  <div class="page">
+    <div class="head head--azul">
+      <div>
+        <h2>FIBRA · Acero Inoxidable</h2>
+        <div class="sub">Tamaño Normal — continuación</div>
+      </div>
+      <img class="mini-logo" src="img-pdf/zirobalogo.png" alt="Ziroba">
+    </div>
+    <div class="grid grid--3">
+      <div class="prod prod--azul">
+        <div class="foto"><img src="img-pdf/FBL-3.jpg" alt="FBL-3"></div>
+        <div class="datos">
+          <div class="codigo">Código: FBL-3</div>
+          <div class="nombre">Fibra ZIROBA Blíster</div>
+          <div class="detalle">Blíster con 3 fibras, ideal para supermercados. Caja máster: 115 blíster de 3 fibras.</div>
+        </div>
+      </div>
+      <div class="prod prod--azul">
+        <div class="foto"><img src="img-pdf/FBL-5.jpg" alt="FBL-5"></div>
+        <div class="datos">
+          <div class="codigo">Código: FBL-5</div>
+          <div class="nombre">Fibra ZIROBA Blíster</div>
+          <div class="detalle">Blíster con 5 fibras. Excelente relación precio-cantidad para distribuidores. Caja máster: 160 blíster de 5 fibras.</div>
+        </div>
+      </div>
+      <div class="prod prod--azul">
+        <div class="foto"><img src="img-pdf/C-12.jpg" alt="FBL-12"></div>
+        <div class="datos">
+          <div class="codigo">Código: FBL-12</div>
+          <div class="nombre">Fibra ZIROBA Blíster</div>
+          <div class="detalle">Blíster con 12 bolsas. Presentación multipack para grandes volúmenes. Caja máster: 50 blíster de 12 bolsas.</div>
+        </div>
+      </div>
+    </div>
+    <div class="marca-pie">ZIROBA · La Reina del Hogar</div>
+    <div class="folio">Catálogo 2026 · pág. 3</div>
+  </div>
+
+  <!-- FIBRAS — TAMAÑO MEGA -->
+  <div class="page">
+    <div class="head head--azul">
+      <div>
+        <h2>FIBRA · Acero Inoxidable</h2>
+        <div class="sub">Tamaño Mega — extra grande para limpiezas intensivas</div>
+      </div>
+      <img class="mini-logo" src="img-pdf/zirobalogo.png" alt="Ziroba">
+    </div>
+    <p class="intro">Perfecta para limpiar sartenes y ollas, parrillas y asadores, coladeras y rejillas, y superficies de cocina.</p>
+    <div class="grid grid--2" style="margin:0 auto;">
+      <div class="prod prod--azul">
+        <div class="foto"><img src="img-pdf/FBMG-1.jpg" alt="FBMG-1"></div>
+        <div class="datos">
+          <div class="codigo">Código: FBMG-1</div>
+          <div class="nombre">Fibra ZIROBA Mega</div>
+          <div class="detalle">Mega con 1 fibra. Tamaño extra grande para limpiezas intensivas. Caja máster: 190 bolsas de 1 fibra.</div>
+        </div>
+      </div>
+      <div class="prod prod--azul">
+        <div class="foto"><img src="img-pdf/FBMG-2.jpg" alt="FBMG-2"></div>
+        <div class="datos">
+          <div class="codigo">Código: FBMG-2</div>
+          <div class="nombre">Fibra ZIROBA Mega</div>
+          <div class="detalle">Mega con 2 fibras. Tamaño mega con doble contenido para mayor duración. Caja máster: 130 bolsas de 2 fibras.</div>
+        </div>
+      </div>
+    </div>
+    <div class="marca-pie">ZIROBA · La Reina del Hogar</div>
+    <div class="folio">Catálogo 2026 · pág. 4</div>
+  </div>
+
+  <!-- TOALLAS -->
+  <div class="page">
+    <div class="head head--oro">
+      <div>
+        <h2>Toalla Exfoliante · Corporal</h2>
+        <div class="sub">Línea Zacate Ziroba — Cuidado Premium</div>
+      </div>
+      <img class="mini-logo" src="img-pdf/zirobalogo.png" alt="Ziroba">
+    </div>
+    <p class="intro">Creada con materiales y estándares de la más alta calidad, ideal para todo tipo de personas y todo tipo de piel. Activa la circulación, elimina células muertas y llega a las áreas de difícil acceso, dejando la piel suave y renovada.
+      <br><span class="chip chip--oro">Cuidado personal</span><span class="chip chip--azul">Todo tipo de piel</span><span class="chip chip--azul">Alta calidad</span></p>
+    <div class="grid grid--4">
+      <div class="prod prod--oro">
+        <div class="foto"><img src="img-pdf/tecz-c.jpg" alt="TECZ-C"></div>
+        <div class="datos">
+          <div class="codigo">Código: TECZ-C</div>
+          <div class="nombre">Toalla Exfoliante en Caja</div>
+          <div class="detalle">60% Nailon · 40% Poliéster. Presentación premium en caja individual, ideal para regalo o tiendas de cuidado personal.</div>
+        </div>
+      </div>
+      <div class="prod prod--oro">
+        <div class="foto"><img src="img-pdf/teczbec.jpg" alt="TECZ-BEC"></div>
+        <div class="datos">
+          <div class="codigo">Código: TECZ-BEC</div>
+          <div class="nombre">Toalla Exfoliante Poliéster</div>
+          <div class="detalle">100% Poliéster. Diseño especial para mayor visibilidad en punto de venta.</div>
+        </div>
+      </div>
+      <div class="prod prod--oro">
+        <div class="foto"><img src="img-pdf/tecz-b.jpg" alt="TECZ-B"></div>
+        <div class="datos">
+          <div class="codigo">Código: TECZ-B</div>
+          <div class="nombre">Toalla Exfoliante en Bolsa -B</div>
+          <div class="detalle">60% Nailon · 40% Poliéster. Presentación en bolsa, perfecta para distribución masiva.</div>
+        </div>
+      </div>
+      <div class="prod prod--oro">
+        <div class="foto"><img src="img-pdf/tecz bel.jpg" alt="TECZ-BEL"></div>
+        <div class="datos">
+          <div class="codigo">Código: TECZ-BEL</div>
+          <div class="nombre">Toalla Exfoliante en Bolsa -BEL</div>
+          <div class="detalle">60% Nailon · 40% Poliéster. Presentación larga, ideal para limpiezas corporales completas.</div>
+        </div>
+      </div>
+    </div>
+    <div class="marca-pie">ZIROBA · La Reina del Hogar</div>
+    <div class="folio">Catálogo 2026 · pág. 5</div>
+  </div>
+
+  <!-- COTONETES -->
+  <div class="page">
+    <div class="head head--verde">
+      <div>
+        <h2>Cotonetes · de Bambú</h2>
+        <div class="sub">Línea Ecológica — Biodegradable y compostable</div>
+      </div>
+      <img class="mini-logo" src="img-pdf/zirobalogo.png" alt="Ziroba">
+    </div>
+    <p class="intro">Elaborados con materia prima de calidad: punta 100% de algodón y mango de bambú. Son biodegradables y compostables, amigables con el medio ambiente — sin sacrificar la suavidad y eficacia que toda la familia necesita.
+      <br><span class="chip chip--verde">Biodegradable</span><span class="chip chip--verde">Compostable</span><span class="chip chip--verde">Algodón 100%</span><span class="chip chip--azul">Hechos de Bambú</span></p>
+    <div class="grid grid--3">
+      <div class="prod prod--verde">
+        <div class="foto"><img src="img-pdf/310z.jpg" alt="310-Z"></div>
+        <div class="datos">
+          <div class="codigo">Código: 310-Z</div>
+          <div class="nombre">Cotonetes Ziroba 310</div>
+          <div class="detalle">310 cotonetes. Mango de bambú biodegradable, punta 100% algodón. Ideal para belleza, bebés y hogar.</div>
+        </div>
+      </div>
+      <div class="prod prod--verde">
+        <div class="foto"><img src="img-pdf/410-z.jpg" alt="410-Z"></div>
+        <div class="datos">
+          <div class="codigo">Código: 410-Z</div>
+          <div class="nombre">Cotonetes Ziroba 410</div>
+          <div class="detalle">410 cotonetes. Mayor cantidad por paquete para familias numerosas o negocios de cuidado personal.</div>
+        </div>
+      </div>
+      <div class="prod prod--verde">
+        <div class="foto"><img src="img-pdf/510-z.jpg" alt="510-Z"></div>
+        <div class="datos">
+          <div class="codigo">Código: 510-Z</div>
+          <div class="nombre">Cotonetes Ziroba 510</div>
+          <div class="detalle">510 cotonetes. La presentación más grande para distribuidores con alto volumen de venta.</div>
+        </div>
+      </div>
+    </div>
+    <div class="marca-pie">ZIROBA · La Reina del Hogar</div>
+    <div class="folio">Catálogo 2026 · pág. 6</div>
+  </div>
+
+  <!-- CONTACTO -->
+  <div class="page contacto">
+    <div class="burbuja" style="position:absolute;width:60mm;height:60mm;top:-18mm;left:-14mm;border-radius:50%;border:2px solid rgba(255,255,255,.18);background:radial-gradient(circle at 32% 30%, rgba(255,255,255,.28), rgba(255,255,255,.03) 65%, transparent);"></div>
+    <div style="position:relative;z-index:2;">
+      <h2>Haz tu pedido hoy mismo</h2>
+      <div class="sub2">Precios por volumen, entrega oportuna y atención personalizada en toda la República Mexicana y América Latina.</div>
+      <div class="fichas">
+        <div class="ficha">
+          <div class="t">WhatsApp Ventas</div>
+          <div class="v">(+52) 55 7858 3609<br>wa.me/525578583609</div>
+        </div>
+        <div class="ficha">
+          <div class="t">Teléfonos</div>
+          <div class="v">(+52) 55 7678 9035 · 9036<br>(+52) 55 7678 9037 · 9038</div>
+        </div>
+        <div class="ficha">
+          <div class="t">Correo y Web</div>
+          <div class="v">ventas@zirobamexico.com<br>zirobamexico.com</div>
+        </div>
+        <div class="ficha">
+          <div class="t">Dirección</div>
+          <div class="v">Vicente Guerrero 58, Urbana Ixhuatepec, Ecatepec de Morelos, Edomex C.P. 55300</div>
+        </div>
+      </div>
+      <img class="logo2" src="img-pdf/zirobalogo.png" alt="Ziroba México">
+    </div>
+  </div>
+
+</body>
+</html>

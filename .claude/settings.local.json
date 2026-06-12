@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Trabajo\\\\Desktop\\\\ziroba claude\" -File | Select-Object Name, Length; \\(Get-Content \"C:\\\\Users\\\\Trabajo\\\\Desktop\\\\ziroba claude\\\\blog.html\" | Measure-Object -Line\\).Lines; \\(Get-Content \"C:\\\\Users\\\\Trabajo\\\\Desktop\\\\ziroba claude\\\\nosotros.html\" | Measure-Object -Line\\).Lines)",
+      "PowerShell($edge = @\\(\"$env:ProgramFiles\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\", \"${env:ProgramFiles\\(x86\\)}\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\"\\) | Where-Object { Test-Path $_ } | Select-Object -First 1; $edge)"
+    ]
+  }
+}
