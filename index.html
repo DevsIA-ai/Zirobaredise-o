@@ -29,7 +29,7 @@
     "description": "Empresa mexicana dedicada a la distribución de productos de limpieza al mayoreo: fibras de acero inoxidable, cotonetes de bambú y toallas exfoliantes corporales.",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Vicente Guerrero 58",
+      "streetAddress": "Vicente Guerrero 55",
       "addressLocality": "Urbana Ixhuatepec, Ecatepec de Morelos",
       "addressRegion": "Estado de México",
       "postalCode": "55300",
@@ -44,16 +44,16 @@
       },
       {
         "@type": "ContactPoint",
-        "telephone": "+52-55-7858-3609",
+        "telephone": "+52-237-130-4060",
         "contactType": "customer support",
         "availableLanguage": "Spanish"
       }
     ],
     "email": "ventas@zirobamexico.com",
     "sameAs": [
-      "https://www.facebook.com/ZirobaMX",
-      "https://www.instagram.com/zirobamexico/",
-      "https://www.tiktok.com/@zirobamexico",
+      "https://www.facebook.com/share/18ddJsq19P/",
+      "https://www.instagram.com/zirobamexico?igsh=NDdwcDVzN3QzMnpk",
+      "https://www.tiktok.com/@zirobamexico?_r=1&amp;_t=ZS-97ANQM3QM0F",
       "https://www.amazon.com.mx/s?srs=121147690011&rh=p_89%3AZIROBA",
       "https://listado.mercadolibre.com.mx/zacate-corporal-ziroba"
     ]
@@ -101,6 +101,15 @@
     .hero-slide--fibra  { background:linear-gradient(140deg,#0B3C6E 0%,#1265A8 48%,#3E2566 100%); }
     .hero-slide--toalla { background:linear-gradient(140deg,#3E2566 0%,#6A2D91 48%,#114B85 100%); }
     .hero-slide--eco    { background:linear-gradient(140deg,#0B4A32 0%,#11724B 48%,#0E3A66 100%); }
+
+    .slide-photo {
+      position:absolute; inset:0; pointer-events:none; z-index:0;
+      background-size:cover; background-position:center;
+      opacity:0.09; mix-blend-mode:screen;
+    }
+    .hero-slide--fibra  .slide-photo { background-image:url("imagenes/imagenes%20carrusel/antes%20y%20despues%20fibra.png"); }
+    .hero-slide--toalla .slide-photo { background-image:url("imagenes/imagenes%20carrusel/toalla.JPG"); }
+    .hero-slide--eco    .slide-photo { background-image:url("imagenes/imagenes%20carrusel/cotonete.png"); }
 
     .hero-slide::before, .hero-slide::after {
       content:''; position:absolute; border-radius:50%;
@@ -224,9 +233,8 @@
       content:''; position:absolute; inset:0;
       background:var(--grad-gold);
       transform:scaleX(0); transform-origin:left;
-      animation:dotFill 6s linear forwards;
+      animation:dotFill 10s linear forwards;
     }
-    .hero-carousel-wrap:hover .hero-dot.active::after { animation-play-state:paused; }
     @keyframes dotFill { to { transform:scaleX(1); } }
 
     /* Trust bar */
@@ -281,6 +289,302 @@
     @media (prefers-reduced-motion:reduce) {
       .ticker-track { animation:none; }
     }
+
+    /* ============================================================
+       COTONETES SLIDE — Secuencia cinematográfica 2 fases
+       Fase 1: cada imagen llena la slide completa, una por una
+       Fase 2: se encogen al lado derecho, aparece el texto
+       ============================================================ */
+
+    /* Halo ring: desactivar para layout de 3 en fila */
+    .hero-slide--eco .hero-visual::before { display:none; }
+
+    /* Columna visual más ancha → imágenes más grandes; menos padding izquierdo → texto más pegado al borde */
+    .hero-slide--eco .hero-slide-inner {
+      grid-template-columns: 1fr 720px;
+      padding-left: 0;
+      gap: 24px;
+    }
+    .hero-slide--eco .hero-slide-inner > div:first-child {
+      margin-left: -48px;
+    }
+
+    /* Capa intro: cubre toda la slide mientras el contenido espera */
+    .cot-intro { position:absolute; inset:0; z-index:8; pointer-events:none; }
+    .hero-slide--eco.active .cot-intro { animation:cotIntroOut .35s 2.45s ease forwards; }
+    @keyframes cotIntroOut { to { opacity:0; } }
+
+    .cot-intro__panel {
+      position:absolute; inset:0; opacity:0;
+      display:flex; align-items:center;
+    }
+    .cot-intro__panel--1 { justify-content:flex-start; padding-left:8vw; }
+    .cot-intro__panel--2 { justify-content:center; }
+    .cot-intro__panel--3 { justify-content:flex-end; padding-right:8vw; }
+    .cot-intro__panel img {
+      max-height:72%; max-width:46%;
+      object-fit:contain;
+      filter:drop-shadow(0 36px 64px rgba(4,18,38,.75));
+    }
+
+    /* Cada panel aparece en su lugar y SE QUEDA visible.
+       Todos salen juntos al mismo tiempo (2.3s). */
+    .hero-slide--eco.active .cot-intro__panel--1 {
+      animation: cotPanelIn .5s 0s   ease forwards,
+                 cotPanelOut .5s 2.3s cubic-bezier(.6,0,1,.85) forwards;
+    }
+    .hero-slide--eco.active .cot-intro__panel--2 {
+      animation: cotPanelIn .5s .6s  ease forwards,
+                 cotPanelOut .5s 2.3s cubic-bezier(.6,0,1,.85) forwards;
+    }
+    .hero-slide--eco.active .cot-intro__panel--3 {
+      animation: cotPanelIn .5s 1.2s ease forwards,
+                 cotPanelOut .5s 2.3s cubic-bezier(.6,0,1,.85) forwards;
+    }
+
+    @keyframes cotPanelIn {
+      from { opacity:0; transform:scale(.88); }
+      to   { opacity:1; transform:scale(1); }
+    }
+    @keyframes cotPanelOut {
+      from { opacity:1; transform:scale(1)   translateX(0); }
+      to   { opacity:0; transform:scale(.12) translateX(220%); }
+    }
+
+    /* Fase 2 — texto: aparece después del intro */
+    .hero-slide--eco.active .hero-label { animation:heroUp .7s 2.5s  cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--eco.active .hero-h1    { animation:heroUp .8s 2.62s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--eco.active .hero-sub   { animation:heroUp .8s 2.74s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--eco.active .hero-btns  { animation:heroUp .8s 2.86s cubic-bezier(.22,.9,.36,1) forwards; }
+
+    /* Fase 2 — 3 imágenes en fila al lado derecho */
+    .hero-slide--eco .hero-visual { flex-direction:row; align-items:flex-end; gap:4px; }
+
+    /* Link wrapper: lleva al click y controla el hover */
+    .cot-link {
+      flex:1; min-width:0; display:flex; text-decoration:none;
+      transition: transform .32s cubic-bezier(.34,1.56,.64,1),
+                  filter .25s ease;
+    }
+    .cot-link:hover {
+      transform: translateY(-10px) scale(1.1);
+      filter: drop-shadow(0 20px 34px rgba(79,208,255,.45));
+    }
+    .cot-link:hover img { animation-play-state:paused; }
+
+    .hero-slide--eco .hero-visual img {
+      width:100%; max-height:640px;
+      position:relative; opacity:0; transform:none;
+      filter:drop-shadow(0 14px 20px rgba(4,18,38,.5));
+    }
+    .hero-slide--eco.active .hero-visual img { animation:none; }
+    .hero-slide--eco.active .hero-visual img.cot-img-1 {
+      animation: cotFinalIn .55s 2.4s  cubic-bezier(.34,1.4,.64,1) forwards,
+                 cotBob     5s   3.05s ease-in-out infinite;
+    }
+    .hero-slide--eco.active .hero-visual img.cot-img-2 {
+      animation: cotFinalIn .55s 2.52s cubic-bezier(.34,1.4,.64,1) forwards,
+                 cotBob     5s   3.17s ease-in-out infinite;
+    }
+    .hero-slide--eco.active .hero-visual img.cot-img-3 {
+      animation: cotFinalIn .55s 2.64s cubic-bezier(.34,1.4,.64,1) forwards,
+                 cotBob     5s   3.29s ease-in-out infinite;
+    }
+    @keyframes cotFinalIn {
+      from { opacity:0; transform:scale(1.6) translateX(18px); }
+      to   { opacity:1; transform:scale(1)   translateX(0); }
+    }
+    @keyframes cotBob {
+      0%,100% { opacity:1; transform:none; }
+      50%     { opacity:1; transform:translateY(-11px); }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .cot-intro { display:none; }
+      .hero-slide--eco.active .hero-label { animation-delay:.12s; }
+      .hero-slide--eco.active .hero-h1    { animation-delay:.26s; }
+      .hero-slide--eco.active .hero-sub   { animation-delay:.40s; }
+      .hero-slide--eco.active .hero-btns  { animation-delay:.54s; }
+      .hero-slide--eco.active .hero-visual img.cot-img-1,
+      .hero-slide--eco.active .hero-visual img.cot-img-2,
+      .hero-slide--eco.active .hero-visual img.cot-img-3 { opacity:1; animation:none; }
+    }
+
+    /* ============================================================
+       FIBRAS SLIDE — cuadrícula 4×2 (8 imágenes)
+       (reutiliza @keyframes cotPanelIn/Out, cotFinalIn, cotBob)
+       ============================================================ */
+    .hero-slide--fibra .hero-visual::before { display:none; }
+    .hero-slide--fibra .hero-slide-inner {
+      grid-template-columns: 1fr 840px;
+      padding-left: 0;
+      padding-right: 0;
+      gap: 24px;
+    }
+    .hero-slide--fibra .hero-slide-inner > div:first-child { margin-left:-48px; }
+
+    /* Intro overlay: 5 cols (4×1fr + 1.5fr C-12) — igual layout que la visual final */
+    .fib-intro {
+      position:absolute; inset:0; z-index:8; pointer-events:none;
+      display:grid;
+      grid-template-columns:repeat(4,1fr) 1.5fr;
+      grid-template-rows:1fr 1fr;
+      gap:10px;
+      padding:20px 40px;
+    }
+    .hero-slide--fibra.active .fib-intro { animation:cotIntroOut .35s 3.25s ease forwards; }
+
+    .fib-intro__panel {
+      opacity:0;
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden;
+    }
+    .fib-intro__panel--big {
+      grid-column:5;
+      grid-row:1 / span 2;
+    }
+    .fib-intro__panel img {
+      max-height:100%; max-width:100%;
+      object-fit:contain;
+      filter:drop-shadow(0 16px 32px rgba(4,18,38,.8));
+    }
+
+    /* 8 paneles escalonados (0.3s c/u), todos salen juntos */
+    .hero-slide--fibra.active .fib-intro__panel:nth-child(1) { animation:cotPanelIn .4s 0s    ease forwards, cotPanelOut .5s 2.9s cubic-bezier(.6,0,1,.85) forwards; }
+    .hero-slide--fibra.active .fib-intro__panel:nth-child(2) { animation:cotPanelIn .4s .3s   ease forwards, cotPanelOut .5s 2.9s cubic-bezier(.6,0,1,.85) forwards; }
+    .hero-slide--fibra.active .fib-intro__panel:nth-child(3) { animation:cotPanelIn .4s .6s   ease forwards, cotPanelOut .5s 2.9s cubic-bezier(.6,0,1,.85) forwards; }
+    .hero-slide--fibra.active .fib-intro__panel:nth-child(4) { animation:cotPanelIn .4s .9s   ease forwards, cotPanelOut .5s 2.9s cubic-bezier(.6,0,1,.85) forwards; }
+    .hero-slide--fibra.active .fib-intro__panel:nth-child(5) { animation:cotPanelIn .4s 1.2s  ease forwards, cotPanelOut .5s 2.9s cubic-bezier(.6,0,1,.85) forwards; }
+    .hero-slide--fibra.active .fib-intro__panel:nth-child(6) { animation:cotPanelIn .4s 1.5s  ease forwards, cotPanelOut .5s 2.9s cubic-bezier(.6,0,1,.85) forwards; }
+    .hero-slide--fibra.active .fib-intro__panel:nth-child(7) { animation:cotPanelIn .4s 1.8s  ease forwards, cotPanelOut .5s 2.9s cubic-bezier(.6,0,1,.85) forwards; }
+    .hero-slide--fibra.active .fib-intro__panel:nth-child(8) { animation:cotPanelIn .4s 2.1s  ease forwards, cotPanelOut .5s 2.9s cubic-bezier(.6,0,1,.85) forwards; }
+
+    /* Fase 2: texto */
+    .hero-slide--fibra.active .hero-label { animation:heroUp .7s 3.35s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--fibra.active .hero-h1    { animation:heroUp .8s 3.47s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--fibra.active .hero-sub   { animation:heroUp .8s 3.59s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--fibra.active .hero-btns  { animation:heroUp .8s 3.71s cubic-bezier(.22,.9,.36,1) forwards; }
+
+    /* Fase 2: 5 cols (4×1fr + 2fr C-12) — 7 regulares igual tamaño, C-12 col 5 abarca 2 filas */
+    .hero-slide--fibra .hero-visual {
+      display:grid;
+      grid-template-columns:repeat(4, 1fr) 2.5fr;
+      grid-template-rows:240px 240px;
+      gap:4px;
+    }
+    .fib-link {
+      display:flex; align-items:center; justify-content:center;
+      text-decoration:none; height:100%;
+      transition:transform .32s cubic-bezier(.34,1.56,.64,1), filter .25s ease;
+    }
+    .fib-link--big { grid-column:5; grid-row:1 / span 2; justify-content:flex-start; }
+    .fib-link:hover { transform:translateY(-8px) scale(1.1); filter:drop-shadow(0 16px 28px rgba(79,208,255,.45)); }
+    .fib-link:hover img { animation-play-state:paused; }
+    .hero-slide--fibra .hero-visual img {
+      height:100%; width:auto; max-width:100%;
+      position:relative; opacity:0; transform:none;
+      object-fit:contain;
+      filter:drop-shadow(0 10px 16px rgba(4,18,38,.5));
+    }
+    .hero-slide--fibra.active .hero-visual img { animation:none; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-1 { animation:cotFinalIn .5s 3.3s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 3.9s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-2 { animation:cotFinalIn .5s 3.4s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.0s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-3 { animation:cotFinalIn .5s 3.5s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.1s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-4 { animation:cotFinalIn .5s 3.6s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.2s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-5 { animation:cotFinalIn .5s 3.7s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.3s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-6 { animation:cotFinalIn .5s 4.1s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.7s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-7 { animation:cotFinalIn .5s 3.8s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.4s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-8 { animation:cotFinalIn .5s 3.9s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.5s  ease-in-out infinite; }
+
+    @media (prefers-reduced-motion:reduce) {
+      .fib-intro { display:none; }
+      .hero-slide--fibra.active .hero-label { animation-delay:.12s; }
+      .hero-slide--fibra.active .hero-h1    { animation-delay:.26s; }
+      .hero-slide--fibra.active .hero-sub   { animation-delay:.40s; }
+      .hero-slide--fibra.active .hero-btns  { animation-delay:.54s; }
+      .hero-slide--fibra.active .hero-visual img.fib-img-1,
+      .hero-slide--fibra.active .hero-visual img.fib-img-2,
+      .hero-slide--fibra.active .hero-visual img.fib-img-3,
+      .hero-slide--fibra.active .hero-visual img.fib-img-4,
+      .hero-slide--fibra.active .hero-visual img.fib-img-5,
+      .hero-slide--fibra.active .hero-visual img.fib-img-6,
+      .hero-slide--fibra.active .hero-visual img.fib-img-7,
+      .hero-slide--fibra.active .hero-visual img.fib-img-8 { opacity:1; animation:none; }
+    }
+
+    /* ============================================================
+       TOALLAS SLIDE — cuadrícula 2×2 (4 imágenes)
+       (reutiliza @keyframes cotPanelIn/Out, cotFinalIn, cotBob)
+       ============================================================ */
+    .hero-slide--toalla .hero-visual::before { display:none; }
+    .hero-slide--toalla .hero-slide-inner {
+      grid-template-columns: 1fr 720px;
+      padding-left: 0;
+      gap: 24px;
+    }
+    .hero-slide--toalla .hero-slide-inner > div:first-child { margin-left:-48px; }
+
+    /* Intro overlay: cuadrícula 2×2 que cubre todo el slide */
+    .toa-intro {
+      position:absolute; inset:0; z-index:8; pointer-events:none;
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      grid-template-rows:1fr 1fr;
+      gap:12px;
+      padding:24px 48px;
+    }
+    .hero-slide--toalla.active .toa-intro { animation:cotIntroOut .35s 2.55s ease forwards; }
+
+    .toa-intro__panel {
+      opacity:0;
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden;
+    }
+    .toa-intro__panel img {
+      max-height:100%; max-width:100%;
+      object-fit:contain;
+      filter:drop-shadow(0 20px 40px rgba(62,37,102,.85));
+    }
+
+    /* 4 paneles aparecen escalonados (0.4s cada uno), todos salen juntos */
+    .hero-slide--toalla.active .toa-intro__panel:nth-child(1) { animation:cotPanelIn .5s 0s   ease forwards, cotPanelOut .5s 2.2s cubic-bezier(.6,0,1,.85) forwards; }
+    .hero-slide--toalla.active .toa-intro__panel:nth-child(2) { animation:cotPanelIn .5s .4s  ease forwards, cotPanelOut .5s 2.2s cubic-bezier(.6,0,1,.85) forwards; }
+    .hero-slide--toalla.active .toa-intro__panel:nth-child(3) { animation:cotPanelIn .5s .8s  ease forwards, cotPanelOut .5s 2.2s cubic-bezier(.6,0,1,.85) forwards; }
+    .hero-slide--toalla.active .toa-intro__panel:nth-child(4) { animation:cotPanelIn .5s 1.2s ease forwards, cotPanelOut .5s 2.2s cubic-bezier(.6,0,1,.85) forwards; }
+
+    /* Fase 2: texto */
+    .hero-slide--toalla.active .hero-label { animation:heroUp .7s 2.7s  cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--toalla.active .hero-h1    { animation:heroUp .8s 2.82s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--toalla.active .hero-sub   { animation:heroUp .8s 2.94s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--toalla.active .hero-btns  { animation:heroUp .8s 3.06s cubic-bezier(.22,.9,.36,1) forwards; }
+
+    /* Fase 2: columna visual — cuadrícula 2×2 */
+    .hero-slide--toalla .hero-visual { flex-direction:row; flex-wrap:wrap; align-items:flex-end; align-content:flex-end; column-gap:4px; row-gap:28px; }
+    .toa-link { width:calc(50% - 2px); display:flex; align-items:center; justify-content:center; text-decoration:none; transition:transform .32s cubic-bezier(.34,1.56,.64,1), filter .25s ease; }
+    .toa-link:hover { transform:translateY(-10px) scale(1.1); filter:drop-shadow(0 20px 34px rgba(106,45,145,.5)); }
+    .toa-link:hover img { animation-play-state:paused; }
+    .hero-slide--toalla .hero-visual img {
+      height:200px; width:auto; max-width:100%;
+      position:relative; opacity:0; transform:none;
+      object-fit:contain;
+      filter:drop-shadow(0 14px 20px rgba(62,37,102,.55));
+    }
+    .hero-slide--toalla.active .hero-visual img { animation:none; }
+    .hero-slide--toalla.active .hero-visual img.toa-img-1 { animation:cotFinalIn .55s 2.6s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 3.25s ease-in-out infinite; }
+    .hero-slide--toalla.active .hero-visual img.toa-img-2 { animation:cotFinalIn .55s 2.72s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 3.37s ease-in-out infinite; }
+    .hero-slide--toalla.active .hero-visual img.toa-img-3 { animation:cotFinalIn .55s 2.84s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 3.49s ease-in-out infinite; }
+    .hero-slide--toalla.active .hero-visual img.toa-img-4 { animation:cotFinalIn .55s 2.96s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 3.61s ease-in-out infinite; }
+
+    @media (prefers-reduced-motion:reduce) {
+      .toa-intro { display:none; }
+      .hero-slide--toalla.active .hero-label { animation-delay:.12s; }
+      .hero-slide--toalla.active .hero-h1    { animation-delay:.26s; }
+      .hero-slide--toalla.active .hero-sub   { animation-delay:.40s; }
+      .hero-slide--toalla.active .hero-btns  { animation-delay:.54s; }
+      .hero-slide--toalla.active .hero-visual img.toa-img-1,
+      .hero-slide--toalla.active .hero-visual img.toa-img-2,
+      .hero-slide--toalla.active .hero-visual img.toa-img-3,
+      .hero-slide--toalla.active .hero-visual img.toa-img-4 { opacity:1; animation:none; }
+    }
   </style>
 </head>
 <body>
@@ -294,19 +598,19 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 12.5 19.79 19.79 0 01.12 4 2 2 0 012.1 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 9.91a16 16 0 006.17 6.17l1.08-1.34a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
             (+52) 55 7678 9035
           </a>
-          <a href="https://wa.me/525578583609?text=Hola%2C+me+interesa+conocer+los+productos+Ziroba+y+ser+distribuidor." target="_blank" rel="noopener" class="utility-bar__item">
+          <a href="https://wa.me/522371304060?text=Hola%2C+me+interesa+conocer+los+productos+Ziroba." target="_blank" rel="noopener" class="utility-bar__item">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             Escríbenos ahora
           </a>
         </div>
         <div class="utility-bar__socials">
-          <a href="https://www.facebook.com/ZirobaMX" target="_blank" rel="noopener" aria-label="Facebook">
+          <a href="https://www.facebook.com/share/18ddJsq19P/" target="_blank" rel="noopener" aria-label="Facebook">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           </a>
-          <a href="https://www.instagram.com/zirobamexico/" target="_blank" rel="noopener" aria-label="Instagram">
+          <a href="https://www.instagram.com/zirobamexico?igsh=NDdwcDVzN3QzMnpk" target="_blank" rel="noopener" aria-label="Instagram">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           </a>
-          <a href="https://www.tiktok.com/@zirobamexico" target="_blank" rel="noopener" aria-label="TikTok">
+          <a href="https://www.tiktok.com/@zirobamexico?_r=1&amp;_t=ZS-97ANQM3QM0F" target="_blank" rel="noopener" aria-label="TikTok">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.83a8.18 8.18 0 004.78 1.52V6.9a4.85 4.85 0 01-1.01-.21z"/></svg>
           </a>
         </div>
@@ -344,7 +648,7 @@
               </a>
             </div>
           </div>
-          <a href="distribuidores.html" class="navbar__link">Mayoreo</a>
+          <a href="mayoreo.html" class="navbar__link">Mayoreo</a>
           <a href="nosotros.html" class="navbar__link">Nosotros</a>
           <!--  <a href="donde-comprar.html" class="navbar__link">Dóndee Comprar</a> -->
           <a href="blog.html" class="navbar__link">Blog</a>
@@ -374,14 +678,14 @@
         <a href="productos.html#toallas">Toalla Exfoliante</a>
       </div>
     </div>
-    <a href="distribuidores.html" class="navbar__mobile-link">Mayoreo</a>
+    <a href="mayoreo.html" class="navbar__mobile-link">Mayoreo</a>
     <a href="nosotros.html" class="navbar__mobile-link">Nosotros</a>
     <!-- <a href="donde-comprar.html" class="navbar__mobile-link">Dónde Comprar</a> -->
     <a href="blog.html" class="navbar__mobile-link">Blog</a>
     <a href="contacto.html" class="navbar__mobile-link">Contacto</a>
     <div class="navbar__mobile-ctas">
       <a href="catalogo.html" class="btn btn--primary" style="justify-content:center;">Descargar Catálogo</a>
-      <a href="https://wa.me/525578583609?text=Hola%2C+me+interesa+conocer+los+productos+Ziroba." target="_blank" rel="noopener" class="navbar__mobile-wa">
+      <a href="https://wa.me/522371304060?text=Hola%2C+me+interesa+conocer+los+productos+Ziroba." target="_blank" rel="noopener" class="navbar__mobile-wa">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Escríbenos por WhatsApp
       </a>
@@ -396,6 +700,17 @@
         <!-- SLIDE 1: Fibras -->
         <div class="hero-slide hero-slide--fibra active">
           <div class="hero-sheen" aria-hidden="true"></div>
+          <div class="slide-photo" aria-hidden="true"></div>
+          <div class="fib-intro" aria-hidden="true">
+            <div class="fib-intro__panel"><img src="imagenes/productos%20ziroba/fibra/FB-2.png"   alt=""></div>
+            <div class="fib-intro__panel"><img src="imagenes/productos%20ziroba/fibra/FB-3.png"   alt=""></div>
+            <div class="fib-intro__panel"><img src="imagenes/productos%20ziroba/fibra/FBL-2.png"  alt=""></div>
+            <div class="fib-intro__panel"><img src="imagenes/productos%20ziroba/fibra/FBL-3.png"  alt=""></div>
+            <div class="fib-intro__panel"><img src="imagenes/productos%20ziroba/fibra/FBL-5.png"  alt=""></div>
+            <div class="fib-intro__panel"><img src="imagenes/productos%20ziroba/fibra/FBMG-1.png" alt=""></div>
+            <div class="fib-intro__panel"><img src="imagenes/productos%20ziroba/fibra/FBMG-2.png" alt=""></div>
+            <div class="fib-intro__panel fib-intro__panel--big"><img src="imagenes/productos%20ziroba/fibra/C-12.png" alt=""></div>
+          </div>
           <div class="container" style="position:relative;z-index:2;width:100%;">
             <div class="hero-slide-inner">
               <div>
@@ -407,14 +722,21 @@
                     Ver Productos
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </a>
-                  <a href="https://wa.me/525578583609?text=Hola%2C+me+interesa+conocer+los+productos+Ziroba." target="_blank" rel="noopener" class="btn btn--wa-big btn--lg">
+                  <a href="https://wa.me/522371304060?text=Hola%2C+me+interesa+conocer+los+productos+Ziroba." target="_blank" rel="noopener" class="btn btn--wa-big btn--lg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                     Escríbenos ahora
                   </a>
                 </div>
               </div>
               <div class="hero-visual">
-                <img src="imagenes/productos%20ziroba/fibras%20juntas.png" alt="Fibras ZIROBA">
+                <a href="productos.html#fibras" class="fib-link"><img class="fib-img-1" src="imagenes/productos%20ziroba/fibra/FB-2.png"   alt="Fibra ZIROBA FB"   loading="lazy"></a>
+                <a href="productos.html#fibras" class="fib-link"><img class="fib-img-2" src="imagenes/productos%20ziroba/fibra/FB-3.png"   alt="Fibra ZIROBA FB"   loading="lazy"></a>
+                <a href="productos.html#fibras" class="fib-link"><img class="fib-img-3" src="imagenes/productos%20ziroba/fibra/FBL-2.png"  alt="Fibra ZIROBA FBL"  loading="lazy"></a>
+                <a href="productos.html#fibras" class="fib-link"><img class="fib-img-4" src="imagenes/productos%20ziroba/fibra/FBL-3.png"  alt="Fibra ZIROBA FBL"  loading="lazy"></a>
+                <a href="productos.html#fibras" class="fib-link"><img class="fib-img-5" src="imagenes/productos%20ziroba/fibra/FBL-5.png"  alt="Fibra ZIROBA FBL"  loading="lazy"></a>
+                <a href="productos.html#fibras" class="fib-link"><img class="fib-img-7" src="imagenes/productos%20ziroba/fibra/FBMG-1.png" alt="Fibra ZIROBA FBMG" loading="lazy"></a>
+                <a href="productos.html#fibras" class="fib-link"><img class="fib-img-8" src="imagenes/productos%20ziroba/fibra/FBMG-2.png" alt="Fibra ZIROBA FBMG" loading="lazy"></a>
+                <a href="productos.html#fibras" class="fib-link fib-link--big"><img class="fib-img-6" src="imagenes/productos%20ziroba/fibra/C-12.png"   alt="Fibra ZIROBA C-12 (12 unidades)" loading="lazy"></a>
               </div>
             </div>
           </div>
@@ -423,6 +745,13 @@
         <!-- SLIDE 2: Toallas -->
         <div class="hero-slide hero-slide--toalla">
           <div class="hero-sheen" aria-hidden="true"></div>
+          <div class="slide-photo" aria-hidden="true"></div>
+          <div class="toa-intro" aria-hidden="true">
+            <div class="toa-intro__panel"><img src="imagenes/productos%20ziroba/toalla/tecz-c.png"      alt=""></div>
+            <div class="toa-intro__panel"><img src="imagenes/productos%20ziroba/toalla/teczbec.png"     alt=""></div>
+            <div class="toa-intro__panel"><img src="imagenes/productos%20ziroba/toalla/tecz-b.png"      alt=""></div>
+            <div class="toa-intro__panel"><img src="imagenes/productos%20ziroba/toalla/tecz%20bel.png"  alt=""></div>
+          </div>
           <div class="container" style="position:relative;z-index:2;width:100%;">
             <div class="hero-slide-inner">
               <div>
@@ -434,14 +763,17 @@
                     Ver Productos
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </a>
-                  <a href="https://wa.me/525578583609?text=Hola%2C+me+interesa+conocer+los+productos+Ziroba." target="_blank" rel="noopener" class="btn btn--wa-big btn--lg">
+                  <a href="https://wa.me/522371304060?text=Hola%2C+me+interesa+conocer+los+productos+Ziroba." target="_blank" rel="noopener" class="btn btn--wa-big btn--lg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                     Escríbenos ahora
                   </a>
                 </div>
               </div>
               <div class="hero-visual">
-                <img src="imagenes/productos%20ziroba/toallas%20juntas.png" alt="Toallas Exfoliantes ZIROBA" loading="lazy">
+                <a href="productos.html#toallas" class="toa-link"><img class="toa-img-1" src="imagenes/productos%20ziroba/toalla/tecz-c.png"     alt="Toalla Exfoliante en Caja ZIROBA"      loading="lazy"></a>
+                <a href="productos.html#toallas" class="toa-link"><img class="toa-img-2" src="imagenes/productos%20ziroba/toalla/teczbec.png"    alt="Toalla Exfoliante Poliéster ZIROBA"   loading="lazy"></a>
+                <a href="productos.html#toallas" class="toa-link"><img class="toa-img-3" src="imagenes/productos%20ziroba/toalla/tecz-b.png"     alt="Toalla Exfoliante en Bolsa B ZIROBA"  loading="lazy"></a>
+                <a href="productos.html#toallas" class="toa-link"><img class="toa-img-4" src="imagenes/productos%20ziroba/toalla/tecz%20bel.png" alt="Toalla Exfoliante en Bolsa BEL ZIROBA" loading="lazy"></a>
               </div>
             </div>
           </div>
@@ -450,6 +782,21 @@
         <!-- SLIDE 3: Cotonetes -->
         <div class="hero-slide hero-slide--eco">
           <div class="hero-sheen" aria-hidden="true"></div>
+          <div class="slide-photo" aria-hidden="true"></div>
+
+          <!-- Fase 1: cada imagen ocupa la slide completa, una por una -->
+          <div class="cot-intro" aria-hidden="true">
+            <div class="cot-intro__panel cot-intro__panel--1">
+              <img src="imagenes/productos%20ziroba/cotonete/310z.png" alt="">
+            </div>
+            <div class="cot-intro__panel cot-intro__panel--2">
+              <img src="imagenes/productos%20ziroba/cotonete/410-z.png" alt="">
+            </div>
+            <div class="cot-intro__panel cot-intro__panel--3">
+              <img src="imagenes/productos%20ziroba/cotonete/510-z.png" alt="">
+            </div>
+          </div>
+
           <div class="container" style="position:relative;z-index:2;width:100%;">
             <div class="hero-slide-inner">
               <div>
@@ -461,14 +808,22 @@
                     Ver Productos
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </a>
-                  <a href="https://wa.me/525578583609?text=Hola%2C+me+interesa+conocer+los+productos+Ziroba." target="_blank" rel="noopener" class="btn btn--wa-big btn--lg">
+                  <a href="https://wa.me/522371304060?text=Hola%2C+me+interesa+conocer+los+productos+Ziroba." target="_blank" rel="noopener" class="btn btn--wa-big btn--lg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                     Escríbenos ahora
                   </a>
                 </div>
               </div>
               <div class="hero-visual">
-                <img src="imagenes/productos%20ziroba/cotonetes%20juntas.png" alt="Cotonetes Bambú ZIROBA" loading="lazy">
+                <a href="productos.html#cotonetes" class="cot-link">
+                  <img class="cot-img-1" src="imagenes/productos%20ziroba/cotonete/310z.png"  alt="Cotonetes Bambú ZIROBA 310" loading="lazy">
+                </a>
+                <a href="productos.html#cotonetes" class="cot-link">
+                  <img class="cot-img-2" src="imagenes/productos%20ziroba/cotonete/410-z.png" alt="Cotonetes Bambú ZIROBA 410" loading="lazy">
+                </a>
+                <a href="productos.html#cotonetes" class="cot-link">
+                  <img class="cot-img-3" src="imagenes/productos%20ziroba/cotonete/510-z.png" alt="Cotonetes Bambú ZIROBA 510" loading="lazy">
+                </a>
               </div>
             </div>
           </div>
@@ -527,7 +882,7 @@
   <section class="section section--alt">
     <div class="container">
       <div class="text-center" style="margin-bottom:56px;">
-        <span class="section-label">Portafolio</span>
+        <span class="section-label">Productos</span>
         <h2 class="section-title">Nuestras líneas de producto</h2>
         <p class="section-subtitle center">Todo lo que necesitas para mantener tu hogar y negocio impecable, en un solo proveedor.</p>
       </div>
@@ -608,7 +963,7 @@
             </li>
           </ul>
           <div style="display:flex;flex-wrap:wrap;gap:12px;">
-            <a href="distribuidores.html" class="btn btn--orange btn--lg">Hacer mi pedido</a>
+            <a href="mayoreo.html" class="btn btn--orange btn--lg">Hacer mi pedido</a>
             <a href="catalogo.html" class="btn btn--outline-teal">Descargar catálogo →</a>
           </div>
         </div>
@@ -637,8 +992,8 @@
             <span class="card__badge">Fibra ZIROBA</span>
             <h3 class="card__title">Cómo limpiar una parrilla después del asado sin esfuerzo</h3>
             <p class="card__text" style="font-size:.85rem;">El truco que usan los expertos para tener una parrilla brillante en 5 minutos.</p>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;">
-              <span style="font-size:.8rem;color:var(--gray);">8 ene 2025</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:16px;">
+              <span style="font-size:.8rem;color:var(--gray);">15 de enero, 2026</span>
               <a href="blog.html#parrilla" class="card__link" style="font-size:.85rem;">Leer más →</a>
             </div>
           </div>
@@ -653,8 +1008,8 @@
             <span class="card__badge badge--orange">Toalla Exfoliante</span>
             <h3 class="card__title">Cómo usar la Toalla Exfoliante Corporal Ziroba paso a paso</h3>
             <p class="card__text" style="font-size:.85rem;">Técnica, frecuencia y cómo adaptarla a tu tipo de piel para ver resultados desde la primera sesión.</p>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;">
-              <span style="font-size:.8rem;color:var(--gray);">10 feb 2025</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:16px;">
+              <span style="font-size:.8rem;color:var(--gray);">22 de abril, 2026</span>
               <a href="blog.html#toalla-paso-a-paso" class="card__link" style="font-size:.85rem;">Leer más →</a>
             </div>
           </div>
@@ -669,8 +1024,8 @@
             <span class="card__badge badge--green">Cotonetes</span>
             <h3 class="card__title">¿Por qué cambiar tus cotonetes de plástico por bambú?</h3>
             <p class="card__text" style="font-size:.85rem;">El impacto ambiental de este pequeño cambio y sus beneficios para tu salud y el planeta.</p>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;">
-              <span style="font-size:.8rem;color:var(--gray);">2 ene 2025</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:16px;">
+              <span style="font-size:.8rem;color:var(--gray);">5 de diciembre, 2025</span>
               <a href="blog.html#cotonetes-bambu" class="card__link" style="font-size:.85rem;">Leer más →</a>
             </div>
           </div>
@@ -760,16 +1115,16 @@
             </a>
           </div>
           <div class="footer__socials">
-            <a href="https://www.facebook.com/ZirobaMX" target="_blank" rel="noopener" class="footer__social-btn" aria-label="Facebook">
+            <a href="https://www.facebook.com/share/18ddJsq19P/" target="_blank" rel="noopener" class="footer__social-btn" aria-label="Facebook">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
             </a>
-            <a href="https://www.instagram.com/zirobamexico/" target="_blank" rel="noopener" class="footer__social-btn" aria-label="Instagram">
+            <a href="https://www.instagram.com/zirobamexico?igsh=NDdwcDVzN3QzMnpk" target="_blank" rel="noopener" class="footer__social-btn" aria-label="Instagram">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
             </a>
-            <a href="https://www.tiktok.com/@zirobamexico" target="_blank" rel="noopener" class="footer__social-btn" aria-label="TikTok">
+            <a href="https://www.tiktok.com/@zirobamexico?_r=1&amp;_t=ZS-97ANQM3QM0F" target="_blank" rel="noopener" class="footer__social-btn" aria-label="TikTok">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.83a8.18 8.18 0 004.78 1.52V6.9a4.85 4.85 0 01-1.01-.21z"/></svg>
             </a>
-            <a href="https://wa.me/525578583609" class="footer__social-btn" aria-label="WhatsApp" style="background:rgba(37,211,102,.15);color:#25D366;">
+            <a href="https://wa.me/522371304060" class="footer__social-btn" aria-label="WhatsApp" style="background:rgba(37,211,102,.15);color:#25D366;">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             </a>
           </div>
@@ -779,7 +1134,7 @@
           <ul class="footer__links">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="productos.html">Productos</a></li>
-            <li><a href="distribuidores.html">Mayoreo</a></li>
+            <li><a href="mayoreo.html">Mayoreo</a></li>
             <li><a href="nosotros.html">Nosotros</a></li>
            <!-- <li><a href="donde-comprar.html">Dónde Comprar</a></li> -->
             <li><a href="contacto.html">Contacto</a></li>
@@ -798,7 +1153,7 @@
           <div class="footer__col-title">Contacto</div>
           <div class="footer__contact-item">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <a href="https://maps.app.goo.gl/gzKfzwtEmLWUvBBd7" target="_blank" rel="noopener" style="color:inherit;">Vicente Guerrero 58, Urbana Ixhuatepec,<br>Ecatepec, Estado de México</a>
+            <a href="https://maps.app.goo.gl/gzKfzwtEmLWUvBBd7" target="_blank" rel="noopener" style="color:inherit;">Vicente Guerrero 55, Urbana Ixhuatepec,<br>Ecatepec, Estado de México</a>
           </div>
           <div class="footer__contact-item" style="align-items:flex-start;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;margin-top:3px;"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 12.5 19.79 19.79 0 01.12 4 2 2 0 012.1 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 9.91a16 16 0 006.17 6.17l1.08-1.34a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
@@ -828,7 +1183,7 @@
   </footer>
 
   <!-- WhatsApp FAB -->
-  <a href="https://wa.me/525578583609?text=Hola%2C+me+interesa+conocer+los+productos+Ziroba+y+ser+distribuidor." target="_blank" rel="noopener" class="wa-fab" aria-label="Contactar por WhatsApp">
+  <a href="https://wa.me/522371304060?text=Hola%2C+me+interesa+conocer+los+productos+Ziroba." target="_blank" rel="noopener" class="wa-fab" aria-label="Contactar por WhatsApp">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
   </a>
 
@@ -845,7 +1200,7 @@
       var total  = slides.length;
       var cur    = 0;
       var timer;
-      var INTERVALO = 6000; /* sincronizado con la barra de los dots */
+      var INTERVALO = 10000; /* sincronizado con la barra de los dots */
 
       function goTo(idx) {
         var nuevo = ((idx % total) + total) % total;
@@ -871,9 +1226,7 @@
       if (next) next.addEventListener('click', function () { goTo(cur + 1); reset(); });
       dots.forEach(function (d, i) { d.addEventListener('click', function () { goTo(i); reset(); }); });
 
-      /* Pausa el autoplay mientras el cursor está encima */
-      wrap.addEventListener('mouseenter', function () { clearInterval(timer); });
-      wrap.addEventListener('mouseleave', reset);
+      /* Autoplay no se pausa al pasar el cursor — sincronizado con la barra de progreso */
 
       /* Teclado (cuando el hero está a la vista) */
       document.addEventListener('keydown', function (e) {
