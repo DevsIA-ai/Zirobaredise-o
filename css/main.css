@@ -631,6 +631,14 @@ p  { color: var(--gray); font-size: 1.02rem; line-height: 1.8; }
 }
 .product-card__img-wrap img { transition: transform .5s cubic-bezier(.34, 1.2, .64, 1); }
 .product-card:hover .product-card__img-wrap img { transform: scale(1.09) rotate(1.5deg); }
+
+/* Toallas: el área de imagen crece en hover en lugar del zoom interno */
+#toallas .product-card__img-wrap {
+  transition: transform .5s cubic-bezier(.34, 1.2, .64, 1);
+  transform-origin: top center;
+}
+#toallas .product-card:hover .product-card__img-wrap { transform: scale(1.08); }
+#toallas .product-card:hover .product-card__img-wrap img { transform: none; }
 .product-card__img-placeholder {
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   color: var(--blue); opacity: .5;
@@ -985,6 +993,23 @@ select.form-control {
 }
 .split__accent { border-left: 5px solid var(--gold); padding-left: 22px; }
 
+.mobile-catalogo-cta { display: none; }
+
+/* Split mayoreo: imagen izquierda, título+cuerpo derecha en escritorio */
+.split--mayoreo {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  gap: 0 80px;
+}
+.split--mayoreo__titulo { grid-column: 2; grid-row: 1; padding-bottom: 8px; }
+.split--mayoreo__img   { grid-column: 1; grid-row: 1 / span 2; align-self: center; border-radius: var(--radius); overflow: hidden; }
+.split--mayoreo__body  { grid-column: 2; grid-row: 2; }
+/* Imagen de envíos vertical más compacta y centrada en laptop+ */
+@media (min-width: 1024px) {
+  .mayoreo-img { max-width: 75%; margin: 0 auto; }
+}
+
 /* --- Map placeholder --- */
 .map-placeholder {
   width: 100%;
@@ -1242,6 +1267,11 @@ select.form-control {
   .grid-4 { grid-template-columns: 1fr 1fr; }
   .split { grid-template-columns: 1fr; gap: 40px; }
   .split--reverse .split__img { order: -1; }
+  .split--mayoreo { grid-template-columns: 1fr; grid-template-rows: unset; gap: 24px; }
+  .split--mayoreo__titulo { grid-column: 1; grid-row: 1; }
+  .split--mayoreo__img    { grid-column: 1; grid-row: 2; }
+  .split--mayoreo__body   { grid-column: 1; grid-row: 3; }
+  .mobile-catalogo-cta { display: flex; justify-content: center; padding: 28px 16px; }
   .steps { flex-direction: column; }
   .step::after { display: none; }
   .footer__grid { grid-template-columns: 1fr; gap: 32px; }
