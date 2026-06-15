@@ -533,9 +533,10 @@
     .toa-intro {
       position:absolute; inset:0; z-index:8; pointer-events:none;
       display:grid;
-      grid-template-columns:repeat(2,1fr);
-      grid-template-rows:1fr 1fr;
-      gap:12px;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      grid-template-rows:auto auto;
+      align-content:center;
+      gap:18px 12px;
       padding:24px 48px;
     }
     .hero-slide--toalla.active .toa-intro { animation:cotIntroOut .35s 2.55s ease forwards; }
@@ -543,12 +544,12 @@
     .toa-intro__panel {
       opacity:0;
       display:flex; align-items:center; justify-content:center;
-      overflow:hidden;
+      overflow:visible;
     }
     .toa-intro__panel:nth-child(odd)  { justify-content:flex-end;   padding-right:40px; }
     .toa-intro__panel:nth-child(even) { justify-content:flex-start; padding-left:40px;  }
     .toa-intro__panel img {
-      max-height:100%; max-width:100%;
+      max-height:30vh; max-width:90%;
       object-fit:contain;
       filter:drop-shadow(0 20px 40px rgba(62,37,102,.85));
     }
@@ -1203,7 +1204,7 @@
             </li>
           </ul>
           <div style="display:flex;flex-wrap:wrap;gap:12px;">
-            <a href="mayoreo.html" class="btn btn--orange btn--lg">Hacer mi pedido</a>
+            <a href="https://wa.me/522371304060?text=Hola%2C+quiero+hacer+un+pedido+al+mayoreo+de+productos+Ziroba." target="_blank" rel="noopener" class="btn btn--orange btn--lg">Hacer mi pedido</a>
             <a href="catalogo.html" class="btn btn--outline-teal">Descargar catálogo →</a>
           </div>
         </div>
