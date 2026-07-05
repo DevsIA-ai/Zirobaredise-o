@@ -79,6 +79,19 @@
     .hero-carousel-wrap { position:relative; overflow:hidden; }
     .hero-carousel-wrap .bubble { z-index:3; }
 
+    /* Video intro: cubre el carrusel al cargar y se desvanece al terminar */
+    .hero-video-intro {
+      position:absolute; inset:0; z-index:30; background:#000;
+      opacity:1; transition:opacity .8s ease;
+    }
+    .hero-video-intro video { width:100%; height:100%; object-fit:cover; display:block; }
+    .hero-video-intro.is-hidden { opacity:0; pointer-events:none; }
+    /* En móvil el video se ve como en productos (300px); al terminar, el carrusel crece a su tamaño normal */
+    @media (max-width:768px) {
+      .hero-carousel-wrap.intro-active { height:300px; }
+      .hero-video-intro { top:0; left:0; right:0; bottom:auto; height:300px; }
+    }
+
     /* Las slides se apilan en la misma celda de grid:
        el alto lo dicta el contenido más alto (sin cortes en móvil). */
     .hero-stage { display:grid; min-height:0; background:var(--grad-deep); }
@@ -233,7 +246,7 @@
       content:''; position:absolute; inset:0;
       background:var(--grad-gold);
       transform:scaleX(0); transform-origin:left;
-      animation:dotFill 12s linear forwards;
+      animation:dotFill 14s linear forwards;
     }
     @keyframes dotFill { to { transform:scaleX(1); } }
 
@@ -414,6 +427,102 @@
     }
 
     /* ============================================================
+       SLIDE NUEVAS PRESENTACIONES — cotonetes en bote y caja
+       Fase 1: los 6 productos aparecen solos · Fase 2: con texto
+       ============================================================ */
+    .hero-slide--nuevos { background:linear-gradient(140deg,#0E5A46 0%,#12936F 48%,#0C5E86 100%); }
+    .hero-slide--nuevos .slide-photo { background-image:url("imagenes/imagenes%20carrusel/cotonete.webp"); }
+    .hero-slide--nuevos .hero-slide-inner {
+      grid-template-columns:1fr 720px;
+      padding-left:0; padding-right:0; gap:40px;
+    }
+    .hero-slide--nuevos .hero-slide-inner > div:first-child { margin-left:-48px; }
+
+    /* ---- FASE 1 (escritorio): rejilla 3×2 de productos que aparecen solos ---- */
+    .nue-intro {
+      position:absolute; inset:0; z-index:8; pointer-events:none;
+      display:grid; grid-template-columns:repeat(3, minmax(0,1fr));
+      grid-template-rows:auto auto; align-content:center;
+      gap:16px; padding:24px 5vw;
+    }
+    .hero-slide--nuevos.active .nue-intro { animation:cotIntroOut .4s 2.7s ease forwards; }
+    .nue-intro__panel { opacity:0; display:flex; align-items:center; justify-content:center; }
+    .nue-intro__panel img { max-height:30vh; max-width:82%; object-fit:contain; filter:drop-shadow(0 26px 46px rgba(4,18,38,.7)); }
+    .hero-slide--nuevos.active .nue-intro__panel { animation:nuePanelIn .55s cubic-bezier(.34,1.4,.64,1) forwards; }
+    .hero-slide--nuevos.active .nue-intro__panel:nth-child(1) { animation-delay:0s;   }
+    .hero-slide--nuevos.active .nue-intro__panel:nth-child(2) { animation-delay:.18s; }
+    .hero-slide--nuevos.active .nue-intro__panel:nth-child(3) { animation-delay:.36s; }
+    .hero-slide--nuevos.active .nue-intro__panel:nth-child(4) { animation-delay:.54s; }
+    .hero-slide--nuevos.active .nue-intro__panel:nth-child(5) { animation-delay:.72s; }
+    .hero-slide--nuevos.active .nue-intro__panel:nth-child(6) { animation-delay:.90s; }
+    @keyframes nuePanelIn { from { opacity:0; transform:scale(.85) translateY(16px); } to { opacity:1; transform:scale(1) translateY(0); } }
+
+    /* ---- FASE 2: texto (aparece después de la fase 1) ---- */
+    .hero-slide--nuevos.active .hero-label { animation:heroUp .7s 2.85s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--nuevos.active .hero-h1    { animation:heroUp .8s 2.97s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--nuevos.active .hero-sub   { animation:heroUp .8s 3.09s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--nuevos.active .hero-btns  { animation:heroUp .8s 3.21s cubic-bezier(.22,.9,.36,1) forwards; }
+
+    /* ---- FASE 2: rejilla 3×2 al lado derecho ---- */
+    .hero-slide--nuevos .hero-visual {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      grid-template-rows:auto auto;
+      gap:16px;
+      align-content:center;
+    }
+    .nue-link {
+      display:flex; align-items:center; justify-content:center;
+      background:none; border:none;
+      padding:12px;
+      text-decoration:none;
+      transition:transform .32s cubic-bezier(.34,1.56,.64,1), filter .25s ease;
+    }
+    .nue-link:hover { transform:translateY(-8px) scale(1.05); filter:drop-shadow(0 16px 28px rgba(0,0,0,.4)); }
+    .nue-link:hover img { animation-play-state:paused; }
+    .hero-slide--nuevos .hero-visual img {
+      width:100%; height:200px; object-fit:contain; display:block;
+      opacity:0;
+      filter:drop-shadow(0 10px 16px rgba(4,18,38,.5));
+    }
+    .hero-slide--nuevos.active .nue-link:nth-child(1) img { animation:cotFinalIn .5s 2.78s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 3.4s ease-in-out infinite; }
+    .hero-slide--nuevos.active .nue-link:nth-child(2) img { animation:cotFinalIn .5s 2.88s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 3.5s ease-in-out infinite; }
+    .hero-slide--nuevos.active .nue-link:nth-child(3) img { animation:cotFinalIn .5s 2.98s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 3.6s ease-in-out infinite; }
+    .hero-slide--nuevos.active .nue-link:nth-child(4) img { animation:cotFinalIn .5s 3.08s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 3.7s ease-in-out infinite; }
+    .hero-slide--nuevos.active .nue-link:nth-child(5) img { animation:cotFinalIn .5s 3.18s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 3.8s ease-in-out infinite; }
+    .hero-slide--nuevos.active .nue-link:nth-child(6) img { animation:cotFinalIn .5s 3.28s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 3.9s ease-in-out infinite; }
+    @media (prefers-reduced-motion:reduce) {
+      .nue-intro { display:none; }
+      .hero-slide--nuevos.active .hero-visual img { opacity:1; animation:none; }
+      .hero-slide--nuevos.active .hero-label { animation-delay:.12s; }
+      .hero-slide--nuevos.active .hero-h1    { animation-delay:.26s; }
+      .hero-slide--nuevos.active .hero-sub   { animation-delay:.40s; }
+      .hero-slide--nuevos.active .hero-btns  { animation-delay:.54s; }
+    }
+
+    /* ---- Móvil: Fase 1 rejilla 2×3 · Fase 2 texto arriba + rejilla compacta ---- */
+    @media (max-width:768px) {
+      /* Reset del margen negativo (si no, el texto se sale por la izquierda) */
+      .hero-slide--nuevos .hero-slide-inner > div:first-child { margin-left:0; }
+      .hero-slide--nuevos .nue-intro {
+        grid-template-columns:repeat(2, minmax(0,1fr));
+        grid-template-rows:auto auto auto;
+        gap:10px; padding:46px 16px 16px;
+      }
+      /* Sombra suave para que no parezca una card negra detrás de cada imagen */
+      .hero-slide--nuevos .nue-intro__panel img { max-height:20vh; max-width:80%; filter:drop-shadow(0 8px 14px rgba(4,18,38,.3)); }
+      .hero-slide--nuevos.active .fase1-titulo { animation: mobFadeIn .3s 0s ease forwards, mobFadeOut .5s 2.7s ease forwards; }
+      .hero-slide--nuevos .hero-visual {
+        display:grid !important;
+        grid-template-columns:repeat(3,1fr);
+        grid-template-rows:auto auto;
+        gap:8px; align-content:center;
+      }
+      .hero-slide--nuevos .hero-visual img { height:96px !important; }
+      .hero-slide--nuevos .nue-link { padding:7px; }
+    }
+
+    /* ============================================================
        FIBRAS SLIDE — cuadrícula 4×2 (8 imágenes)
        (reutiliza @keyframes cotPanelIn/Out, cotFinalIn, cotBob)
        ============================================================ */
@@ -435,7 +544,7 @@
       gap:10px;
       padding:20px 40px;
     }
-    .hero-slide--fibra.active .fib-intro { animation:cotIntroOut .35s 3.25s ease forwards; }
+    .hero-slide--fibra.active .fib-intro { animation:cotIntroOut .4s 5.3s ease forwards; }
 
     .fase1-titulo { display:none; }
 
@@ -465,10 +574,10 @@
     .hero-slide--fibra.active .fib-intro__panel:nth-child(8) { animation:cotPanelIn .4s 2.1s  ease forwards, cotPanelOut .5s 2.9s cubic-bezier(.6,0,1,.85) forwards; }
 
     /* Fase 2: texto */
-    .hero-slide--fibra.active .hero-label { animation:heroUp .7s 3.35s cubic-bezier(.22,.9,.36,1) forwards; }
-    .hero-slide--fibra.active .hero-h1    { animation:heroUp .8s 3.47s cubic-bezier(.22,.9,.36,1) forwards; }
-    .hero-slide--fibra.active .hero-sub   { animation:heroUp .8s 3.59s cubic-bezier(.22,.9,.36,1) forwards; }
-    .hero-slide--fibra.active .hero-btns  { animation:heroUp .8s 3.71s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--fibra.active .hero-label { animation:heroUp .7s 5.4s  cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--fibra.active .hero-h1    { animation:heroUp .8s 5.52s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--fibra.active .hero-sub   { animation:heroUp .8s 5.64s cubic-bezier(.22,.9,.36,1) forwards; }
+    .hero-slide--fibra.active .hero-btns  { animation:heroUp .8s 5.76s cubic-bezier(.22,.9,.36,1) forwards; }
 
     /* Fase 2: 5 cols (4×1fr + 2fr C-12) — 7 regulares igual tamaño, C-12 col 5 abarca 2 filas */
     .hero-slide--fibra .hero-visual {
@@ -492,14 +601,45 @@
     }
     .hero-slide--fibra .hero-visual img.fib-img-6 { height:580px; width:auto; max-width:none; max-height:none; }
     .hero-slide--fibra.active .hero-visual img { animation:none; }
-    .hero-slide--fibra.active .hero-visual img.fib-img-1 { animation:cotFinalIn .5s 3.3s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 3.9s  ease-in-out infinite; }
-    .hero-slide--fibra.active .hero-visual img.fib-img-2 { animation:cotFinalIn .5s 3.4s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.0s  ease-in-out infinite; }
-    .hero-slide--fibra.active .hero-visual img.fib-img-3 { animation:cotFinalIn .5s 3.5s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.1s  ease-in-out infinite; }
-    .hero-slide--fibra.active .hero-visual img.fib-img-4 { animation:cotFinalIn .5s 3.6s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.2s  ease-in-out infinite; }
-    .hero-slide--fibra.active .hero-visual img.fib-img-5 { animation:cotFinalIn .5s 3.7s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.3s  ease-in-out infinite; }
-    .hero-slide--fibra.active .hero-visual img.fib-img-6 { animation:cotFinalIn .5s 4.1s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.7s  ease-in-out infinite; }
-    .hero-slide--fibra.active .hero-visual img.fib-img-7 { animation:cotFinalIn .5s 3.8s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.4s  ease-in-out infinite; }
-    .hero-slide--fibra.active .hero-visual img.fib-img-8 { animation:cotFinalIn .5s 3.9s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 4.5s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-1 { animation:cotFinalIn .5s 5.4s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.0s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-2 { animation:cotFinalIn .5s 5.5s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.1s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-3 { animation:cotFinalIn .5s 5.6s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.2s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-4 { animation:cotFinalIn .5s 5.7s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.3s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-5 { animation:cotFinalIn .5s 5.8s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.4s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-6 { animation:cotFinalIn .5s 6.2s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.8s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-7 { animation:cotFinalIn .5s 5.9s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.5s  ease-in-out infinite; }
+    .hero-slide--fibra.active .hero-visual img.fib-img-8 { animation:cotFinalIn .5s 6.0s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.6s  ease-in-out infinite; }
+
+    /* ---- FASE 1 (escritorio): tras las 8 fibras, aparecen las 2 nuevas solas ---- */
+    @media (min-width:769px) {
+      .fib-intro__panel--mobonly {
+        position:absolute; top:0; bottom:0; overflow:visible;
+        display:flex; align-items:center; justify-content:center;
+      }
+      .fib-intro__panel--mobonly:nth-child(9)  { left:0;   right:50%; }  /* izquierda */
+      .fib-intro__panel--mobonly:nth-child(10) { left:50%; right:0;  }  /* derecha   */
+      .fib-intro__panel--mobonly img { max-height:80%; max-width:99%; object-fit:contain; filter:drop-shadow(0 24px 44px rgba(4,18,38,.7)); }
+      .hero-slide--fibra.active .fib-intro__panel:nth-child(9)  { animation:cotPanelIn .5s 3.35s ease forwards, cotPanelOut .5s 5.0s cubic-bezier(.6,0,1,.85) forwards; }
+      .hero-slide--fibra.active .fib-intro__panel:nth-child(10) { animation:cotPanelIn .5s 3.5s  ease forwards, cotPanelOut .5s 5.0s cubic-bezier(.6,0,1,.85) forwards; }
+    }
+
+    /* ---- FASE 2 (escritorio): cuadrícula de 8 y luego cambian a las 2 ---- */
+    .hero-slide--fibra .hero-visual { position:relative; }
+    .hero-slide--fibra.active .fib-link:not(.fib-link--final) { animation:fibOut .6s 8.8s ease forwards; }
+    @keyframes fibOut { to { opacity:0; } }
+    .fib-link--final {
+      position:absolute; top:50%; transform:translateY(-50%);
+      width:50%; height:auto; display:flex; align-items:center; justify-content:center;
+      opacity:0; text-decoration:none; z-index:6;
+      transition:transform .32s cubic-bezier(.34,1.56,.64,1), filter .25s ease;
+    }
+    .fib-link--final-a { left:0;  }   /* izquierda */
+    .fib-link--final-b { right:0; }   /* derecha   */
+    .hero-slide--fibra .hero-visual .fib-link--final img { width:auto; max-width:100%; height:auto; max-height:380px; opacity:1; object-fit:contain; filter:drop-shadow(0 12px 20px rgba(4,18,38,.55)); }
+    .fib-link--final:hover { transform:translateY(-50%) translateY(-6px) scale(1.03); filter:drop-shadow(0 18px 30px rgba(79,208,255,.4)); }
+    @keyframes fibFinalIn { from { opacity:0; transform:translateY(-50%) scale(.9); } to { opacity:1; transform:translateY(-50%) scale(1); } }
+    .hero-slide--fibra.active .fib-link--final-a { animation:fibFinalIn .7s 9.2s cubic-bezier(.34,1.4,.64,1) forwards; }
+    .hero-slide--fibra.active .fib-link--final-b { animation:fibFinalIn .7s 9.4s cubic-bezier(.34,1.4,.64,1) forwards; }
 
     @media (prefers-reduced-motion:reduce) {
       .fib-intro { display:none; }
@@ -515,6 +655,9 @@
       .hero-slide--fibra.active .hero-visual img.fib-img-6,
       .hero-slide--fibra.active .hero-visual img.fib-img-7,
       .hero-slide--fibra.active .hero-visual img.fib-img-8 { opacity:1; animation:none; }
+      /* sin animación: se muestran las 8 fijas, ocultamos la fase final */
+      .hero-slide--fibra.active .fib-link:not(.fib-link--final) { animation:none; opacity:1; }
+      .hero-slide--fibra .fib-link--final { display:none; }
     }
 
     /* ============================================================
@@ -691,7 +834,7 @@
         text-shadow:0 1px 8px rgba(0,0,0,.55);
       }
       /* Entra al activarse el slide, se va cuando terminan las cartas */
-      .hero-slide--fibra.active  .fase1-titulo { animation: mobFadeIn .3s 0s ease forwards, mobFadeOut .5s 5.0s ease forwards; }
+      .hero-slide--fibra.active  .fase1-titulo { animation: mobFadeIn .3s 0s ease forwards, mobFadeOut .5s 6.3s ease forwards; }
       .hero-slide--toalla.active .fase1-titulo { animation: mobFadeIn .3s 0s ease forwards, mobFadeOut .5s 3.5s ease forwards; }
       .hero-slide--eco.active    .fase1-titulo { animation: mobFadeIn .3s 0s ease forwards, mobFadeOut .5s 2.7s ease forwards; }
 
@@ -713,37 +856,48 @@
       .fib-intro__panel:nth-child(6) { --mobOff:  50px; z-index:6; } /* derecha    */
       .fib-intro__panel:nth-child(7) { --mobOff:   0px; z-index:7; } /* centro     */
       .fib-intro__panel:nth-child(8) { --mobOff: -50px; z-index:8; } /* izquierda  */
+      /* Las 2 nuevas también entran como cartas en la fase 1 (solo móvil) */
+      .fib-intro__panel--mobonly { display:flex; }
+      .fib-intro__panel:nth-child(9)  { --mobOff:  50px; z-index:9;  } /* derecha */
+      .fib-intro__panel:nth-child(10) { --mobOff:   0px; z-index:10; } /* centro  */
 
-      /* 8 cartas · 0.6s separación · 0.75s duración → última llega a ~4.95s
-         El carrusel avanza cada 10s — texto aparece a ~5.65s, visible ~4.35s */
-      .hero-slide--fibra.active .fib-intro__panel:nth-child(1) { animation:mobCardIn .75s 0s   cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 5.0s ease forwards; }
-      .hero-slide--fibra.active .fib-intro__panel:nth-child(2) { animation:mobCardIn .75s  .6s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 5.0s ease forwards; }
-      .hero-slide--fibra.active .fib-intro__panel:nth-child(3) { animation:mobCardIn .75s 1.2s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 5.0s ease forwards; }
-      .hero-slide--fibra.active .fib-intro__panel:nth-child(4) { animation:mobCardIn .75s 1.8s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 5.0s ease forwards; }
-      .hero-slide--fibra.active .fib-intro__panel:nth-child(5) { animation:mobCardIn .75s 2.4s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 5.0s ease forwards; }
-      .hero-slide--fibra.active .fib-intro__panel:nth-child(6) { animation:mobCardIn .75s 3.0s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 5.0s ease forwards; }
-      .hero-slide--fibra.active .fib-intro__panel:nth-child(7) { animation:mobCardIn .75s 3.6s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 5.0s ease forwards; }
-      .hero-slide--fibra.active .fib-intro__panel:nth-child(8) { animation:mobCardIn .75s 4.2s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 5.0s ease forwards; }
+      /* 10 cartas · 0.6s separación · 0.75s duración → última llega a ~6.15s */
+      .hero-slide--fibra.active .fib-intro__panel:nth-child(1)  { animation:mobCardIn .75s 0s   cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 6.3s ease forwards; }
+      .hero-slide--fibra.active .fib-intro__panel:nth-child(2)  { animation:mobCardIn .75s  .6s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 6.3s ease forwards; }
+      .hero-slide--fibra.active .fib-intro__panel:nth-child(3)  { animation:mobCardIn .75s 1.2s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 6.3s ease forwards; }
+      .hero-slide--fibra.active .fib-intro__panel:nth-child(4)  { animation:mobCardIn .75s 1.8s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 6.3s ease forwards; }
+      .hero-slide--fibra.active .fib-intro__panel:nth-child(5)  { animation:mobCardIn .75s 2.4s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 6.3s ease forwards; }
+      .hero-slide--fibra.active .fib-intro__panel:nth-child(6)  { animation:mobCardIn .75s 3.0s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 6.3s ease forwards; }
+      .hero-slide--fibra.active .fib-intro__panel:nth-child(7)  { animation:mobCardIn .75s 3.6s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 6.3s ease forwards; }
+      .hero-slide--fibra.active .fib-intro__panel:nth-child(8)  { animation:mobCardIn .75s 4.2s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 6.3s ease forwards; }
+      .hero-slide--fibra.active .fib-intro__panel:nth-child(9)  { animation:mobCardIn .75s 4.8s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 6.3s ease forwards; }
+      .hero-slide--fibra.active .fib-intro__panel:nth-child(10) { animation:mobCardIn .75s 5.4s cubic-bezier(.22,.9,.36,1) forwards, mobFadeOut .5s 6.3s ease forwards; }
 
       /* Contenedor y texto aparecen después de que el mazo se desvanece */
-      .hero-slide--fibra.active .fib-intro  { animation:cotIntroOut .4s 5.6s ease forwards; }
-      .hero-slide--fibra.active .hero-label { animation:heroUp .7s  5.65s cubic-bezier(.22,.9,.36,1) forwards; }
-      .hero-slide--fibra.active .hero-h1    { animation:heroUp .8s  5.8s  cubic-bezier(.22,.9,.36,1) forwards; }
-      .hero-slide--fibra.active .hero-sub   { animation:heroUp .8s  5.95s cubic-bezier(.22,.9,.36,1) forwards; }
-      .hero-slide--fibra.active .hero-btns  { animation:heroUp .8s  6.1s  cubic-bezier(.22,.9,.36,1) forwards; }
+      .hero-slide--fibra.active .fib-intro  { animation:cotIntroOut .4s 6.4s ease forwards; }
+      .hero-slide--fibra.active .hero-label { animation:heroUp .7s  6.5s  cubic-bezier(.22,.9,.36,1) forwards; }
+      .hero-slide--fibra.active .hero-h1    { animation:heroUp .8s  6.65s cubic-bezier(.22,.9,.36,1) forwards; }
+      .hero-slide--fibra.active .hero-sub   { animation:heroUp .8s  6.8s  cubic-bezier(.22,.9,.36,1) forwards; }
+      .hero-slide--fibra.active .hero-btns  { animation:heroUp .8s  6.95s cubic-bezier(.22,.9,.36,1) forwards; }
 
       /* Fase 2: grid compacto de imágenes */
       .hero-slide--fibra .hero-visual { display:grid !important; grid-template-columns:repeat(4,1fr) 2fr; grid-template-rows:74px 74px; gap:3px; align-content:center; }
       .hero-slide--fibra .hero-visual img,
       .hero-slide--fibra .hero-visual img.fib-img-6 { width:100%; height:100%; max-width:100%; max-height:100%; object-fit:contain; }
-      .hero-slide--fibra.active .hero-visual img.fib-img-1 { animation:cotFinalIn .5s 5.7s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.3s  ease-in-out infinite; }
-      .hero-slide--fibra.active .hero-visual img.fib-img-2 { animation:cotFinalIn .5s 5.85s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.45s ease-in-out infinite; }
-      .hero-slide--fibra.active .hero-visual img.fib-img-3 { animation:cotFinalIn .5s 6.0s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.6s  ease-in-out infinite; }
-      .hero-slide--fibra.active .hero-visual img.fib-img-4 { animation:cotFinalIn .5s 6.15s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.75s ease-in-out infinite; }
-      .hero-slide--fibra.active .hero-visual img.fib-img-5 { animation:cotFinalIn .5s 6.3s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 6.9s  ease-in-out infinite; }
-      .hero-slide--fibra.active .hero-visual img.fib-img-6 { animation:cotFinalIn .5s 6.75s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 7.35s ease-in-out infinite; }
-      .hero-slide--fibra.active .hero-visual img.fib-img-7 { animation:cotFinalIn .5s 6.45s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 7.05s ease-in-out infinite; }
-      .hero-slide--fibra.active .hero-visual img.fib-img-8 { animation:cotFinalIn .5s 6.6s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 7.2s  ease-in-out infinite; }
+      .hero-slide--fibra.active .hero-visual img.fib-img-1 { animation:cotFinalIn .5s 6.5s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 7.1s  ease-in-out infinite; }
+      .hero-slide--fibra.active .hero-visual img.fib-img-2 { animation:cotFinalIn .5s 6.65s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 7.25s ease-in-out infinite; }
+      .hero-slide--fibra.active .hero-visual img.fib-img-3 { animation:cotFinalIn .5s 6.8s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 7.4s  ease-in-out infinite; }
+      .hero-slide--fibra.active .hero-visual img.fib-img-4 { animation:cotFinalIn .5s 6.95s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 7.55s ease-in-out infinite; }
+      .hero-slide--fibra.active .hero-visual img.fib-img-5 { animation:cotFinalIn .5s 7.1s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 7.7s  ease-in-out infinite; }
+      .hero-slide--fibra.active .hero-visual img.fib-img-6 { animation:cotFinalIn .5s 7.55s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 8.15s ease-in-out infinite; }
+      .hero-slide--fibra.active .hero-visual img.fib-img-7 { animation:cotFinalIn .5s 7.25s cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 7.85s ease-in-out infinite; }
+      .hero-slide--fibra.active .hero-visual img.fib-img-8 { animation:cotFinalIn .5s 7.4s  cubic-bezier(.34,1.4,.64,1) forwards, cotBob 5s 8.0s  ease-in-out infinite; }
+
+      /* ── FASE FINAL móvil: se van las 8 fibras y aparecen las 2 nuevas ── */
+      .hero-slide--fibra.active .fib-link:not(.fib-link--final) { animation:fibOut .6s 9.6s ease forwards; }
+      .hero-slide--fibra .hero-visual .fib-link--final img { width:auto; height:auto; max-width:100%; max-height:175px; }
+      .hero-slide--fibra.active .fib-link--final-a { animation:fibFinalIn .6s 10.0s cubic-bezier(.34,1.4,.64,1) forwards; }
+      .hero-slide--fibra.active .fib-link--final-b { animation:fibFinalIn .6s 10.2s cubic-bezier(.34,1.4,.64,1) forwards; }
 
       /* ── TOALLA: 4 cartas → cuadrícula 2×2, cada una entra a su cuadrante ── */
       .toa-intro { display:block; padding:0; }
@@ -923,7 +1077,7 @@
       <div class="hero-stage" id="heroStage">
 
         <!-- SLIDE 1: Fibras -->
-        <div class="hero-slide hero-slide--fibra active">
+        <div class="hero-slide hero-slide--fibra">
           <div class="hero-sheen" aria-hidden="true"></div>
           <div class="slide-photo" aria-hidden="true"></div>
           <span class="fase1-titulo" aria-hidden="true">Nuestras Fibras</span>
@@ -936,6 +1090,9 @@
             <div class="fib-intro__panel"><img src="imagenes/productos%20ziroba/fibra/FBMG-1.webp" alt=""></div>
             <div class="fib-intro__panel"><img src="imagenes/productos%20ziroba/fibra/FBMG-2.webp" alt=""></div>
             <div class="fib-intro__panel fib-intro__panel--big"><img src="imagenes/productos%20ziroba/fibra/C-12.webp" alt=""></div>
+            <!-- Solo móvil: las 2 nuevas también entran en las cartas de la fase 1 -->
+            <div class="fib-intro__panel fib-intro__panel--mobonly"><img src="imagenes/productos%20ziroba/fibra/1.png" alt=""></div>
+            <div class="fib-intro__panel fib-intro__panel--mobonly"><img src="imagenes/productos%20ziroba/fibra/2.png" alt=""></div>
           </div>
           <div class="container" style="position:relative;z-index:2;width:100%;">
             <div class="hero-slide-inner">
@@ -963,6 +1120,9 @@
                 <a href="productos.html#fibras" class="fib-link"><img class="fib-img-7" src="imagenes/productos%20ziroba/fibra/FBMG-1.webp" alt="Fibra ZIROBA FBMG" loading="lazy"></a>
                 <a href="productos.html#fibras" class="fib-link"><img class="fib-img-8" src="imagenes/productos%20ziroba/fibra/FBMG-2.webp" alt="Fibra ZIROBA FBMG" loading="lazy"></a>
                 <a href="productos.html#fibras" class="fib-link fib-link--big"><img class="fib-img-6" src="imagenes/productos%20ziroba/fibra/C-12.webp"   alt="Fibra ZIROBA C-12 (12 unidades)" loading="lazy"></a>
+                <!-- Fase final: reemplazan a las 8 anteriores -->
+                <a href="productos.html#fibras" class="fib-link fib-link--final fib-link--final-a"><img class="fib-img-9"  src="imagenes/productos%20ziroba/fibra/1.png" alt="Fibra ZIROBA" loading="lazy"></a>
+                <a href="productos.html#fibras" class="fib-link fib-link--final fib-link--final-b"><img class="fib-img-10" src="imagenes/productos%20ziroba/fibra/2.png" alt="Fibra ZIROBA" loading="lazy"></a>
               </div>
             </div>
           </div>
@@ -1057,6 +1217,51 @@
           </div>
         </div>
 
+        <!-- SLIDE 4: Nuevas presentaciones (cotonetes en bote y caja) -->
+        <div class="hero-slide hero-slide--nuevos">
+          <div class="hero-sheen" aria-hidden="true"></div>
+          <div class="slide-photo" aria-hidden="true"></div>
+
+          <span class="fase1-titulo" aria-hidden="true">Nuevas Presentaciones</span>
+          <!-- Fase 1: los 6 productos aparecen solos -->
+          <div class="nue-intro" aria-hidden="true">
+            <div class="nue-intro__panel"><img src="imagenes/productos%20ziroba/cotonete/nuevos%20productos/100bz.png" alt=""></div>
+            <div class="nue-intro__panel"><img src="imagenes/productos%20ziroba/cotonete/nuevos%20productos/100cz.png" alt=""></div>
+            <div class="nue-intro__panel"><img src="imagenes/productos%20ziroba/cotonete/nuevos%20productos/200bz.png" alt=""></div>
+            <div class="nue-intro__panel"><img src="imagenes/productos%20ziroba/cotonete/nuevos%20productos/200cz.png" alt=""></div>
+            <div class="nue-intro__panel"><img src="imagenes/productos%20ziroba/cotonete/nuevos%20productos/500bz.png" alt=""></div>
+            <div class="nue-intro__panel"><img src="imagenes/productos%20ziroba/cotonete/nuevos%20productos/500cz.png" alt=""></div>
+          </div>
+
+          <div class="container" style="position:relative;z-index:2;width:100%;">
+            <div class="hero-slide-inner">
+              <div>
+                <div class="hero-label">🆕 Nuevas presentaciones</div>
+                <h2 class="hero-h1">Cotonetes ahora en bote y en caja</h2>
+                <p class="hero-sub">6 nuevas presentaciones de nuestros cotonetes de bambú: prácticas, higiénicas y listas para tu negocio.</p>
+                <div class="hero-btns">
+                  <a href="productos.html#cotonetes" class="btn btn--primary btn--lg">
+                    Ver Productos
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </a>
+                  <a href="https://wa.me/522371304060?text=Hola%2C+me+interesan+las+nuevas+presentaciones+de+cotonetes+Ziroba." target="_blank" rel="noopener" class="btn btn--wa-big btn--lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    Escríbenos ahora
+                  </a>
+                </div>
+              </div>
+              <div class="hero-visual">
+                <a href="productos.html#cotonetes" class="nue-link"><img class="nue-img-1" src="imagenes/productos%20ziroba/cotonete/nuevos%20productos/100bz.png" alt="Cotonetes de bambú ZIROBA en bote 100-BZ" loading="lazy"></a>
+                <a href="productos.html#cotonetes" class="nue-link"><img class="nue-img-2" src="imagenes/productos%20ziroba/cotonete/nuevos%20productos/100cz.png" alt="Cotonetes de bambú ZIROBA en caja 100-CZ" loading="lazy"></a>
+                <a href="productos.html#cotonetes" class="nue-link"><img class="nue-img-3" src="imagenes/productos%20ziroba/cotonete/nuevos%20productos/200bz.png" alt="Cotonetes de bambú ZIROBA en bote 200-BZ" loading="lazy"></a>
+                <a href="productos.html#cotonetes" class="nue-link"><img class="nue-img-4" src="imagenes/productos%20ziroba/cotonete/nuevos%20productos/200cz.png" alt="Cotonetes de bambú ZIROBA en caja 200-CZ" loading="lazy"></a>
+                <a href="productos.html#cotonetes" class="nue-link"><img class="nue-img-5" src="imagenes/productos%20ziroba/cotonete/nuevos%20productos/500bz.png" alt="Cotonetes de bambú ZIROBA en bote 500-BZ" loading="lazy"></a>
+                <a href="productos.html#cotonetes" class="nue-link"><img class="nue-img-6" src="imagenes/productos%20ziroba/cotonete/nuevos%20productos/500cz.png" alt="Cotonetes de bambú ZIROBA en caja 500-CZ" loading="lazy"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div><!-- /hero-stage -->
 
       <!-- Flechas -->
@@ -1072,6 +1277,14 @@
         <button class="hero-dot active" aria-label="Slide 1"></button>
         <button class="hero-dot" aria-label="Slide 2"></button>
         <button class="hero-dot" aria-label="Slide 3"></button>
+        <button class="hero-dot" aria-label="Slide 4"></button>
+      </div>
+
+      <!-- Video intro: se reproduce primero y luego revela el carrusel -->
+      <div class="hero-video-intro" id="heroVideoIntro">
+        <video id="heroIntroVideo" autoplay muted playsinline preload="auto">
+          <source src="video/hero-productos.mp4" type="video/mp4">
+        </video>
       </div>
 
     </div><!-- /hero-carousel-wrap -->
@@ -1441,7 +1654,7 @@
       var total  = slides.length;
       var cur    = 0;
       var timer;
-      var INTERVALO = 12000; /* sincronizado con la barra de los dots */
+      var INTERVALO = 14000; /* sincronizado con la barra de los dots (dotFill 14s) */
 
       function goTo(idx) {
         var nuevo = ((idx % total) + total) % total;
@@ -1485,8 +1698,41 @@
         if (Math.abs(diff) > 40) { goTo(diff > 0 ? cur + 1 : cur - 1); reset(); }
       }, { passive: true });
 
-      goTo(0);
-      reset();
+      /* ===== Video intro: primero el video, luego el carrusel ===== */
+      var videoIntro = document.getElementById('heroVideoIntro');
+      var introVideo = document.getElementById('heroIntroVideo');
+      var started = false;
+
+      function startCarousel() {
+        if (started) return;
+        started = true;
+        goTo(0);   /* activa el primer slide → dispara su animación de entrada */
+        reset();
+      }
+
+      function endIntro() {
+        if (wrap) wrap.classList.remove('intro-active');   /* el carrusel crece a su tamaño normal */
+        if (videoIntro && !videoIntro.classList.contains('is-hidden')) {
+          videoIntro.classList.add('is-hidden');
+          setTimeout(function () {
+            if (videoIntro && videoIntro.parentNode) videoIntro.parentNode.removeChild(videoIntro);
+          }, 900);
+        }
+        startCarousel();
+      }
+
+      if (introVideo) {
+        if (wrap) wrap.classList.add('intro-active');   /* durante el video: alto compacto en móvil */
+        introVideo.addEventListener('ended', endIntro);
+        introVideo.addEventListener('error', endIntro);
+        /* Si el autoplay se bloquea, revela el carrusel de inmediato */
+        var p = introVideo.play();
+        if (p && p.catch) { p.catch(endIntro); }
+        /* Salvavidas: si 'ended' nunca dispara, revela tras 20s como máximo */
+        setTimeout(endIntro, 20000);
+      } else {
+        startCarousel();
+      }
     })();
   </script>
 </body>
