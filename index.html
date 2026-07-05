@@ -246,7 +246,7 @@
       content:''; position:absolute; inset:0;
       background:var(--grad-gold);
       transform:scaleX(0); transform-origin:left;
-      animation:dotFill 14s linear forwards;
+      animation:dotFill var(--dot-dur, 14s) linear forwards;
     }
     @keyframes dotFill { to { transform:scaleX(1); } }
 
@@ -1654,7 +1654,9 @@
       var total  = slides.length;
       var cur    = 0;
       var timer;
-      var INTERVALO = 14000; /* sincronizado con la barra de los dots (dotFill 14s) */
+      /* Duración por slide (ms): la fibra necesita más por su animación larga */
+      var DURACIONES = [14000, 8000, 8000, 8000]; /* fibra (larga) · toalla · cotonete · nuevos */
+      function durSlide(i) { return DURACIONES[i] || 12000; }
 
       function goTo(idx) {
         var nuevo = ((idx % total) + total) % total;
@@ -1666,14 +1668,17 @@
         });
         dots.forEach(function (d, i) {
           d.classList.toggle('active', i === cur);
-          /* reinicia la barra de progreso del dot activo */
-          if (i === cur) { void d.offsetWidth; }
+          if (i === cur) {
+            /* la barra del dot dura lo mismo que este slide */
+            d.style.setProperty('--dot-dur', (durSlide(cur) / 1000) + 's');
+            void d.offsetWidth; /* reinicia la animación de la barra */
+          }
         });
       }
 
       function reset() {
-        clearInterval(timer);
-        timer = setInterval(function () { goTo(cur + 1); }, INTERVALO);
+        clearTimeout(timer);
+        timer = setTimeout(function () { goTo(cur + 1); reset(); }, durSlide(cur));
       }
 
       if (prev) prev.addEventListener('click', function () { goTo(cur - 1); reset(); });
