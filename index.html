@@ -76,20 +76,17 @@
        entradas escalonadas y producto flotando con halo de luz.
        ============================================================ */
     .hero-carousel-section { position:relative; }
-    .hero-carousel-wrap { position:relative; overflow:hidden; }
-    .hero-carousel-wrap .bubble { z-index:3; }
+    .hero-carousel-wrap { position:relative; overflow:hidden; height:680px; }
+    .hero-carousel-wrap .bubble { display:none; }
 
-    /* Video intro: cubre el carrusel al cargar y se desvanece al terminar */
+    /* Hero = solo el video (carrusel oculto). El video se reproduce una vez y se queda en el último frame */
+    .hero-stage, .hero-arrow, .hero-dots { display:none !important; }
     .hero-video-intro {
-      position:absolute; inset:0; z-index:30; background:#000;
-      opacity:1; transition:opacity .8s ease;
+      position:absolute; inset:0; z-index:2; background:#000;
     }
     .hero-video-intro video { width:100%; height:100%; object-fit:cover; display:block; }
-    .hero-video-intro.is-hidden { opacity:0; pointer-events:none; }
-    /* En móvil el video se ve como en productos (300px); al terminar, el carrusel crece a su tamaño normal */
     @media (max-width:768px) {
-      .hero-carousel-wrap.intro-active { height:300px; }
-      .hero-video-intro { top:0; left:0; right:0; bottom:auto; height:300px; }
+      .hero-carousel-wrap { height:300px; }
     }
 
     /* Las slides se apilan en la misma celda de grid:
@@ -1283,7 +1280,7 @@
       <!-- Video intro: se reproduce primero y luego revela el carrusel -->
       <div class="hero-video-intro" id="heroVideoIntro">
         <video id="heroIntroVideo" autoplay muted playsinline preload="auto">
-          <source src="video/hero-productos.mp4" type="video/mp4">
+          <source src="video/video%20hero.mp4" type="video/mp4">
         </video>
       </div>
 
@@ -1703,40 +1700,11 @@
         if (Math.abs(diff) > 40) { goTo(diff > 0 ? cur + 1 : cur - 1); reset(); }
       }, { passive: true });
 
-      /* ===== Video intro: primero el video, luego el carrusel ===== */
-      var videoIntro = document.getElementById('heroVideoIntro');
+      /* ===== Hero = solo el video: se reproduce UNA vez y se queda en el último frame ===== */
       var introVideo = document.getElementById('heroIntroVideo');
-      var started = false;
-
-      function startCarousel() {
-        if (started) return;
-        started = true;
-        goTo(0);   /* activa el primer slide → dispara su animación de entrada */
-        reset();
-      }
-
-      function endIntro() {
-        if (wrap) wrap.classList.remove('intro-active');   /* el carrusel crece a su tamaño normal */
-        if (videoIntro && !videoIntro.classList.contains('is-hidden')) {
-          videoIntro.classList.add('is-hidden');
-          setTimeout(function () {
-            if (videoIntro && videoIntro.parentNode) videoIntro.parentNode.removeChild(videoIntro);
-          }, 900);
-        }
-        startCarousel();
-      }
-
       if (introVideo) {
-        if (wrap) wrap.classList.add('intro-active');   /* durante el video: alto compacto en móvil */
-        introVideo.addEventListener('ended', endIntro);
-        introVideo.addEventListener('error', endIntro);
-        /* Si el autoplay se bloquea, revela el carrusel de inmediato */
-        var p = introVideo.play();
-        if (p && p.catch) { p.catch(endIntro); }
-        /* Salvavidas: si 'ended' nunca dispara, revela tras 20s como máximo */
-        setTimeout(endIntro, 20000);
-      } else {
-        startCarousel();
+        var pv = introVideo.play();
+        if (pv && pv.catch) { pv.catch(function () {}); }
       }
     })();
   </script>
